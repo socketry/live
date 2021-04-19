@@ -1,6 +1,6 @@
 # Live
 
-Provides bi-directional live HTML views using WebSockets for communication. You can try out a (live example)[http://heroku.herokuapp.com/live/index].
+Provides bi-directional live HTML views using WebSockets for communication. You can try out a [live example](https://utopia-falcon-heroku.herokuapp.com/live/index)
 
 [![Development Status](https://github.com/socketry/live/workflows/Development/badge.svg)](https://github.com/socketry/live/actions?workflow=Development)
 
