@@ -77,7 +77,7 @@ on 'live' do |request|
 end
 ~~~
 
-You will need to host this using an `async`-aware server, like (Falcon)[https://github.com/socketry/falcon].
+You will need to host this using an `async`-aware server, like [Falcon](https://github.com/socketry/falcon).
 
 ## Example Server
 
