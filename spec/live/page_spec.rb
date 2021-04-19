@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 require 'live/page'
+require 'live/view'
 require 'live/resolver'
 
 RSpec.describe Live::Page do
