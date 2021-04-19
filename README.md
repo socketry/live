@@ -24,6 +24,12 @@ We welcome contributions to this project.
 4.  Push to the branch (`git push origin my-new-feature`).
 5.  Create new Pull Request.
 
+## See Also
+
+  - [live-js](https://github.com/socketry/live-js) — The client-side JavaScript library.
+  - [morphdom](https://github.com/patrick-steele-idem/morphdom) — Efficiently update the client-side HTML.
+  - [stimulus-reflex](https://github.com/hopsoft/stimulus_reflex) — An alternative framework which provides similar functionality.
+
 ## License
 
 Copyright, 2020, by [Samuel G. D. Williams](https://www.codeotaku.com).
