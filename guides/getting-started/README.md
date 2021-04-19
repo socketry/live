@@ -72,7 +72,7 @@ RESOLVER = Live::Resolver.allow(ClickCounter)
 # At the same path as the request:
 on 'live' do |request|
 	Async::WebSocket::Adapters::Rack.open(request.env) do |connection|
-		Live::Page.new(connection, RESOLVER).run
+		Live::Page.new(RESOLVER).run(connection)
 	end
 end
 ~~~

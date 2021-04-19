@@ -23,35 +23,19 @@
 require_relative 'element'
 require_relative 'resolver'
 
+require 'async'
+require 'async/queue'
+
 module Live
 	class Page
-		def initialize(connection, resolver)
-			@connection = connection
+		def initialize(resolver)
 			@resolver = resolver
 			
 			@elements = {}
 			@updates = Async::Queue.new
-			
-			@reader = start_reader
 		end
 		
 		attr :updates
-		
-		def start_reader
-			Async do
-				while message = @connection.read
-					Console.logger.debug(self, "Reading message:", message)
-					
-					if id = message[:bind] and data = message[:data]
-						bind(@resolver.call(id, data))
-					elsif id = message[:id]
-						@elements[id].handle(message[:event], message[:details])
-					end
-				end
-			ensure
-				@reader = nil
-			end
-		end
 		
 		def bind(element)
 			@elements[element.id] = element
@@ -59,12 +43,52 @@ module Live
 			element.bind(self)
 		end
 		
-		def run
+		def resolve(id, data)
+			@resolver.call(id, data)
+		end
+		
+		def handle(id, event, details)
+			if element = @elements[id]
+				return element.handle(event, details)
+			else
+				Console.logger.warn(self, "Could not handle event:", event, details)
+			end
+			
+			return nil
+		end
+		
+		def run(connection)
+			reader_task = start_reader(connection)
+			
 			while update = @updates.dequeue
 				Console.logger.debug(self, "Sending update:", update)
 				
-				@connection.write(update)
-				@connection.flush if @updates.empty?
+				connection.write(update)
+				connection.flush if @updates.empty?
+			end
+		ensure
+			reader_task&.stop
+		end
+		
+		private
+		
+		def start_reader(connection)
+			Async do
+				while message = connection.read
+					Console.logger.debug(self, "Reading message:", message)
+					
+					if id = message[:bind] and data = message[:data]
+						if element = self.resolve(id, data)
+							self.bind(element)
+						else
+							Console.logger.warn(self, "Could not resolve element:", message)
+						end
+					elsif id = message[:id]
+						self.handle(id, message[:event], message[:details])
+					else
+						Console.logger.warn(self, "Unhandled message:", message)
+					end
+				end
 			end
 		end
 	end

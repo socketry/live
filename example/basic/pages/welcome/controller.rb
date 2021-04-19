@@ -10,7 +10,7 @@ on 'live' do |request|
 	Console.logger.info("Incoming live connection...")
 	
 	adapter = Async::WebSocket::Adapters::Rack.open(request.env) do |connection|
-		Live::Page.new(connection, RESOLVER).run
+		Live::Page.new(RESOLVER).run(connection)
 	end
 	
 	respond?(adapter) or fail!

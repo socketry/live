@@ -20,47 +20,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'element'
+require 'live/page'
+require 'live/resolver'
 
-module Live
-	# Resolves a client-side tag into a server-side instance.
-	class Resolver
-		# Creates an instance of the resolver, allowing the specified classes to be resolved.
-		def self.allow(*arguments)
-			self.new.allow(*arguments).freeze
-		end
-		
-		def initialize
-			@allowed = {}
-		end
-		
-		attr :allowed
-		
-		def freeze
-			return self unless frozen?
+RSpec.describe Live::Page do
+	let(:connection) {instance_double(Async::WebSocket::Connection)}
+	let(:resolver) {Live::Resolver.new}
+	
+	subject {described_class.new(resolver)}
+	
+	describe '#resolve' do
+		it "resolves allowed elements" do
+			resolver.allowed[Live::View.name] = Live::View
 			
-			@allowed.freeze
-			
-			super
+			expect(subject.resolve('live-view', {class: 'Live::View'})).to be_kind_of(Live::View)
 		end
 		
-		# Allow the specified classes to be resolved.
-		def allow(*arguments)
-			arguments.each do |klass|
-				@allowed[klass.name] = klass
-			end
-			
-			return self
-		end
-		
-		# Resolve a tag.
-		# @parameter id [String] The unique identifier for the tag.
-		# @parameter data [Hash] The data associated with the tag. Should include the `:class` key.
-		# @returns [Element] The element instance if it was allowed.
-		def call(id, data)
-			if klass = @allowed[data[:class]]
-				return klass.new(id, **data)
-			end
+		it "ignores non-allowed elements" do
+			expect(subject.resolve('live-view', {class: 'Live::View'})).to be_nil
 		end
 	end
 end
