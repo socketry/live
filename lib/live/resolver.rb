@@ -23,29 +23,42 @@
 require_relative 'element'
 
 module Live
-	class ClickCounter < Element
-		def initialize(id, **data)
+	# Resolves a client-side tag into a server-side instance.
+	class Resolver
+		# Creates an instance of the resolver, allowing the specified classes to be resolved.
+		def self.allow(*arguments)
+			self.new.allow(*arguments).freeze
+		end
+		
+		def initialize
+			@allowed = {}
+		end
+		
+		def freeze
+			return self unless frozen?
+			
+			@allowed.freeze
+			
 			super
-			
-			@data[:count] ||= 0
 		end
 		
-		def handle(event, details)
-			@data[:count] = Integer(@data[:count]) + 1
+		# Allow the specified classes to be resolved.
+		def allow(*arguments)
+			arguments.each do |klass|
+				@allowed[klass.name] = klass
+			end
 			
-			update!
+			return self
 		end
 		
-		def render(builder)
-			builder.tag :button, onclick: forward do
-				builder.text("Add an image. (#{@data[:count]} images so far).")
-			end
+		# Resolve a tag.
+		# @parameter id [String] The unique identifier for the tag.
+		# @parameter data [Hash] The data associated with the tag. Should include the `:class` key.
+		# @returns [Element]
+		def call(id, data)
+			klass = @allowed[data[:class]]
 			
-			builder.tag :div do
-				Integer(@data[:count]).times do
-					builder.tag :img, src: "https://picsum.photos/200/300"
-				end
-			end
+			return klass.new(id, **data)
 		end
 	end
 end

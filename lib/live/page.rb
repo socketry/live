@@ -21,13 +21,15 @@
 # THE SOFTWARE.
 
 require_relative 'element'
+require_relative 'resolver'
 
 module Live
 	class Page
-		def initialize(connection)
+		def initialize(connection, resolver)
 			@connection = connection
+			@resolver = resolver
 			
-			@tags = {}
+			@elements = {}
 			@updates = Async::Queue.new
 			
 			@reader = start_reader
@@ -38,11 +40,12 @@ module Live
 		def start_reader
 			Async do
 				while message = @connection.read
-					Console.logger.info(self) {"Reading message: #{message}"}
+					Console.logger.debug(self, "Reading message:", message)
+					
 					if id = message[:bind] and data = message[:data]
-						bind(resolve(id, data))
+						bind(@resolver.call(id, data))
 					elsif id = message[:id]
-						@tags[id].handle(message[:event], message[:details])
+						@elements[id].handle(message[:event], message[:details])
 					end
 				end
 			ensure
@@ -50,23 +53,18 @@ module Live
 			end
 		end
 		
-		def resolve(id, data)
-			# This line is a major security issue:
-			klass = Object.const_get(data[:class])
+		def bind(element)
+			@elements[element.id] = element
 			
-			return klass.new(id, **data)
-		end
-		
-		def bind(tag)
-			@tags[tag.id] = tag
-			tag.bind(self)
+			element.bind(self)
 		end
 		
 		def run
 			while update = @updates.dequeue
-				Console.logger.info(self) {"Sending update: #{update}"}
+				Console.logger.debug(self, "Sending update:", update)
+				
 				@connection.write(update)
-				@connection.flush # if @updates.empty?
+				@connection.flush if @updates.empty?
 			end
 		end
 	end
