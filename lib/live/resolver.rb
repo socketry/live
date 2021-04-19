@@ -34,6 +34,7 @@ module Live
 			@allowed = {}
 		end
 		
+		# @attribute [Hash(String, Class)] A map of allowed class names.
 		attr :allowed
 		
 		def freeze

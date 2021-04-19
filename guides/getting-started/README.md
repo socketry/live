@@ -27,7 +27,7 @@ $ npm add @socketry/live
 
 This view tracks how many times it's been clicked.
 
-~~~ bash
+~~~ ruby
 require 'live/view'
 
 class ClickCounter < Live::View

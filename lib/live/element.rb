@@ -23,7 +23,10 @@
 require 'json'
 
 module Live
+	# Represents a single dynamic content area on the page.
 	class Element
+		# @parameter id [String] The unique identifier within the page.
+		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
 		def initialize(id, **data)
 			@id = id
 			@data = data
@@ -32,8 +35,11 @@ module Live
 			@page = nil
 		end
 		
+		# The unique id within the bound page.
 		attr :id
 		
+		# Generate a JavaScript string which forwards the specified event to the server.
+		# @parameter details [Hash] The details associated with the forwarded event.
 		def forward(details = nil)
 			if details
 				"live.forward(#{JSON.dump(@id)}, event, #{JSON.dump(details)})"
@@ -42,13 +48,21 @@ module Live
 			end
 		end
 		
+		# Bind this tag to a dynamically updating page.
+		# @parameter page [Live::Page]
 		def bind(page)
 			@page = page
 		end
 		
-		def handle(event, details)
+		# Handle a client event, typically as triggered by {#forward}.
+		# @parameter event [String] The type of the event.
+		# @parameter details [Hash] The associated details if any.
+		def handle(event, details = nil)
 		end
 		
+		# Enqueue a remote procedure call to the currently bound page.
+		# @parameter method [Symbol] The name of the remote functio to invoke.
+		# @parameter arguments [Array]
 		def rpc(method, arguments)
 			# This update might not be sent right away. Therefore, mutable arguments may be serialized to JSON at a later time (or never). This could be a race condition:
 			@page.updates.enqueue([method, arguments])
