@@ -2,5 +2,5 @@ source 'https://rubygems.org'
 
 gem 'rails'
 gem 'falcon'
-gem 'async-websocket'
+gem 'async-websocket', "~> 0.18.0"
 gem 'live', path: '../../'
