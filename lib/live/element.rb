@@ -27,7 +27,7 @@ module Live
 	class Element
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def initialize(id, **data)
+		def initialize(id=self.class.name.downcase, **data)
 			@id = id
 			@data = data
 			@data[:class] ||= self.class.name
