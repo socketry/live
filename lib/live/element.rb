@@ -54,6 +54,10 @@ module Live
 			@page = page
 		end
 		
+		def close
+			@page = nil
+		end
+		
 		# Handle a client event, typically as triggered by {#forward}.
 		# @parameter event [String] The type of the event.
 		# @parameter details [Hash] The associated details if any.

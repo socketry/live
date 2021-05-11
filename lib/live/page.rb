@@ -71,6 +71,12 @@ module Live
 			return nil
 		end
 		
+		def close
+			@elements.each do |id, element|
+				element.close
+			end
+		end
+		
 		# Run the event handling loop with the given websocket connection.
 		# @parameter connection [Async::WebSocket::Connection]
 		def run(connection)
@@ -99,6 +105,7 @@ module Live
 				end
 			end
 		ensure
+			self.close
 			queue_task&.stop
 		end
 	end
