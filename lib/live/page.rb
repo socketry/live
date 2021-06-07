@@ -61,9 +61,9 @@ module Live
 		# @parameter details [Hash] The associated details if any.
 		# @returns [Object] The result of the element handler, if the element was found.
 		# @returns [Nil] If the element could not be found.
-		def handle(id, event, details)
+		def handle(id, event)
 			if element = @elements[id]
-				return element.handle(event, details)
+				return element.handle(event)
 			else
 				Console.logger.warn(self, "Could not handle event:", event, details)
 			end
@@ -99,7 +99,7 @@ module Live
 						Console.logger.warn(self, "Could not resolve element:", message)
 					end
 				elsif id = message[:id]
-					self.handle(id, message[:event], message[:details])
+					self.handle(id, message[:event])
 				else
 					Console.logger.warn(self, "Unhandled message:", message)
 				end

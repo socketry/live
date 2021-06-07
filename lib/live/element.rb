@@ -60,8 +60,7 @@ module Live
 		
 		# Handle a client event, typically as triggered by {#forward}.
 		# @parameter event [String] The type of the event.
-		# @parameter details [Hash] The associated details if any.
-		def handle(event, details = nil)
+		def handle(event)
 		end
 		
 		# Enqueue a remote procedure call to the currently bound page.
