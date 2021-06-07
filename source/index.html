@@ -36,6 +36,80 @@
 					
 					
 					<ul class="index"><li>
+					<a href="Live/Page/index.html"><code class="language-ruby">class Page</code></a>
+					
+						<p>Represents a connected client page with bound dynamic content areas.</p>
+
+					
+					<ul class="index"><li>
+					<a href="Live/Page/index.html#Live%3A%3APage%23initialize"><code class="language-ruby">def initialize(resolver)</code></a>
+					
+					
+									</li><li>
+					<a href="Live/Page/index.html#Live%3A%3APage%23updates"><code class="language-ruby">attr :updates</code></a>
+					
+						<p>The queue of outstanding events to be sent to the client.</p>
+
+					
+									</li><li>
+					<a href="Live/Page/index.html#Live%3A%3APage%23bind"><code class="language-ruby">def bind(element)</code></a>
+					
+						<p>Bind a client-side element to a server side element.</p>
+
+					
+									</li><li>
+					<a href="Live/Page/index.html#Live%3A%3APage%23resolve"><code class="language-ruby">def resolve(id, data)</code></a>
+					
+						<p>Resolve a client-side element to a server side instance.</p>
+
+					
+									</li><li>
+					<a href="Live/Page/index.html#Live%3A%3APage%23handle"><code class="language-ruby">def handle(id, event)</code></a>
+					
+						<p>Handle an event from the client. If the element could not be found, it is silently ignored.</p>
+
+					
+									</li><li>
+					<a href="Live/Page/index.html#Live%3A%3APage%23run"><code class="language-ruby">def run(connection)</code></a>
+					
+						<p>Run the event handling loop with the given websocket connection.</p>
+
+					
+									</li></ul>				</li><li>
+					<a href="Live/View/index.html"><code class="language-ruby">class View &lt; Element</code></a>
+					
+						<p>Represents a single division of content on the page an provides helpers for rendering the content.</p>
+
+					
+					<ul class="index"><li>
+					<a href="Live/View/index.html#Live%3A%3AView%23replace%21"><code class="language-ruby">def replace!</code></a>
+					
+						<p>Replace the content of the client-side element by rendering this view.</p>
+
+					
+									</li><li>
+					<a href="Live/View/index.html#Live%3A%3AView%23append%21"><code class="language-ruby">def append!(element)</code></a>
+					
+						<p>Append to the content of the client-side element by appending the specified element.</p>
+
+					
+									</li><li>
+					<a href="Live/View/index.html#Live%3A%3AView%23prepend%21"><code class="language-ruby">def prepend!(element)</code></a>
+					
+						<p>Prepend to the content of the client-side element by appending the specified element.</p>
+
+					
+									</li><li>
+					<a href="Live/View/index.html#Live%3A%3AView%23render"><code class="language-ruby">def render(builder)</code></a>
+					
+						<p>Render the element.</p>
+
+					
+									</li><li>
+					<a href="Live/View/index.html#Live%3A%3AView%23to_html"><code class="language-ruby">def to_html</code></a>
+					
+					
+									</li></ul>				</li><li>
 					<a href="Live/Resolver/index.html"><code class="language-ruby">class Resolver</code></a>
 					
 						<p>Resolves a client-side tag into a server-side instance.</p>
@@ -86,7 +160,7 @@
 
 					
 									</li><li>
-					<a href="Live/Element/index.html#Live%3A%3AElement%23handle"><code class="language-ruby">def handle(event, details = nil)</code></a>
+					<a href="Live/Element/index.html#Live%3A%3AElement%23handle"><code class="language-ruby">def handle(event)</code></a>
 					
 						<p>Handle a client event, typically as triggered by <code class="language-ruby">#forward</code>.</p>
 
@@ -96,80 +170,6 @@
 					
 						<p>Enqueue a remote procedure call to the currently bound page.</p>
 
-					
-									</li></ul>				</li><li>
-					<a href="Live/Page/index.html"><code class="language-ruby">class Page</code></a>
-					
-						<p>Represents a connected client page with bound dynamic content areas.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Live/Page/index.html#Live%3A%3APage%23initialize"><code class="language-ruby">def initialize(resolver)</code></a>
-					
-					
-									</li><li>
-					<a href="Live/Page/index.html#Live%3A%3APage%23updates"><code class="language-ruby">attr :updates</code></a>
-					
-						<p>The queue of outstanding events to be sent to the client.</p>
-
-					
-									</li><li>
-					<a href="Live/Page/index.html#Live%3A%3APage%23bind"><code class="language-ruby">def bind(element)</code></a>
-					
-						<p>Bind a client-side element to a server side element.</p>
-
-					
-									</li><li>
-					<a href="Live/Page/index.html#Live%3A%3APage%23resolve"><code class="language-ruby">def resolve(id, data)</code></a>
-					
-						<p>Resolve a client-side element to a server side instance.</p>
-
-					
-									</li><li>
-					<a href="Live/Page/index.html#Live%3A%3APage%23handle"><code class="language-ruby">def handle(id, event, details)</code></a>
-					
-						<p>Handle an event from the client. If the element could not be found, it is silently ignored.</p>
-
-					
-									</li><li>
-					<a href="Live/Page/index.html#Live%3A%3APage%23run"><code class="language-ruby">def run(connection)</code></a>
-					
-						<p>Run the event handling loop with the given websocket connection.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Live/View/index.html"><code class="language-ruby">class View &lt; Element</code></a>
-					
-						<p>Represents a single division of content on the page an provides helpers for rendering the content.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Live/View/index.html#Live%3A%3AView%23replace%21"><code class="language-ruby">def replace!</code></a>
-					
-						<p>Replace the content of the client-side element by rendering this view.</p>
-
-					
-									</li><li>
-					<a href="Live/View/index.html#Live%3A%3AView%23append%21"><code class="language-ruby">def append!(element)</code></a>
-					
-						<p>Append to the content of the client-side element by appending the specified element.</p>
-
-					
-									</li><li>
-					<a href="Live/View/index.html#Live%3A%3AView%23prepend%21"><code class="language-ruby">def prepend!(element)</code></a>
-					
-						<p>Prepend to the content of the client-side element by appending the specified element.</p>
-
-					
-									</li><li>
-					<a href="Live/View/index.html#Live%3A%3AView%23render"><code class="language-ruby">def render(builder)</code></a>
-					
-						<p>Render the element.</p>
-
-					
-									</li><li>
-					<a href="Live/View/index.html#Live%3A%3AView%23to_html"><code class="language-ruby">def to_html</code></a>
-					
 					
 									</li></ul>				</li></ul>				</li></ul>
 				

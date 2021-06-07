@@ -82,18 +82,16 @@ end</code></pre>
 						<pre><code class="language-ruby">def bind(page)
 	@page = page
 end</code></pre>
-					</details></section><section id="Live::Element#handle"><h3><code class="language-ruby">def handle(event, details = nil)</code></h3><p>Handle a client event, typically as triggered by <code class="language-ruby">#forward</code>.</p>
+					</details></section><section id="Live::Element#handle"><h3><code class="language-ruby">def handle(event)</code></h3><p>Handle a client event, typically as triggered by <code class="language-ruby">#forward</code>.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
 					<strong>parameter</strong>　<code class="syntax">event</code>　<code class="language-ruby">String</code></dt><dd><p>The type of the event.</p>
-</dd><dt>
-					<strong>parameter</strong>　<code class="syntax">details</code>　<code class="language-ruby">Hash</code></dt><dd><p>The associated details if any.</p>
 </dd></dl>
 </details>
 <details>
 						<summary><h4>Implementation</h4></summary>
-						<pre><code class="language-ruby">def handle(event, details = nil)
+						<pre><code class="language-ruby">def handle(event)
 end</code></pre>
 					</details></section><section id="Live::Element#rpc"><h3><code class="language-ruby">def rpc(method, arguments)</code></h3><p>Enqueue a remote procedure call to the currently bound page.</p>
 <details open>

@@ -80,7 +80,7 @@ end</code></pre>
 						<pre><code class="language-ruby">def resolve(id, data)
 	@resolver.call(id, data)
 end</code></pre>
-					</details></section><section id="Live::Page#handle"><h3><code class="language-ruby">def handle(id, event, details)</code></h3><p>Handle an event from the client. If the element could not be found, it is silently ignored.</p>
+					</details></section><section id="Live::Page#handle"><h3><code class="language-ruby">def handle(id, event)</code></h3><p>Handle an event from the client. If the element could not be found, it is silently ignored.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
@@ -97,9 +97,9 @@ end</code></pre>
 </details>
 <details>
 						<summary><h4>Implementation</h4></summary>
-						<pre><code class="language-ruby">def handle(id, event, details)
+						<pre><code class="language-ruby">def handle(id, event)
 	if element = @elements[id]
-		return element.handle(event, details)
+		return element.handle(event)
 	else
 		Console.logger.warn(self, &quot;Could not handle event:&quot;, event, details)
 	end
@@ -134,7 +134,7 @@ end</code></pre>
 				Console.logger.warn(self, &quot;Could not resolve element:&quot;, message)
 			end
 		elsif id = message[:id]
-			self.handle(id, message[:event], message[:details])
+			self.handle(id, message[:event])
 		else
 			Console.logger.warn(self, &quot;Unhandled message:&quot;, message)
 		end
