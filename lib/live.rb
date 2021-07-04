@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 require_relative "live/version"
-
+require_relative "live/form"
 require_relative 'live/page'
 require_relative 'live/view'
 
