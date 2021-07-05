@@ -1,10 +1,10 @@
 
 require 'async/websocket/adapters/rack'
-require 'click_counter'
+require 'reactor_status'
 
 prepend Actions
 
-RESOLVER = Live::Resolver.allow(ClickCounter)
+RESOLVER = Live::Resolver.allow(ReactorStatus)
 
 on 'live' do |request|
 	Console.logger.info("Incoming live connection...")
@@ -17,5 +17,5 @@ on 'live' do |request|
 end
 
 on 'index' do
-	@tag = ClickCounter.new('click-counter')
+	@tag = ReactorStatus.new('reactor-status')
 end
