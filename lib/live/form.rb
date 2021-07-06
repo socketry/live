@@ -27,12 +27,12 @@ module Live
 
         # Handles an incoming event.
         def handle(event)
-            self.submit(event)
+            self.submit(event[:details][1])
         end         
 
-        # Processes incoming form data, which can be accesible through @data[:form]
-        def submit(event)
-            @data[:form] = JSON.parse(event[:details])[1].to_h
+        # Processes incoming form data, which can be used through @data[:form]
+        def submit(form_data)
+            @data[:form] = JSON.parse(form_data).to_h
         end 
 
     end 
