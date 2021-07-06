@@ -11,19 +11,15 @@ module Live
     class Form < Live::View 
         
         # returns [String] javascript code to execute when the form is submitted.
-        def handleForm(details=false)
-            if details 
-                return "live.handleForm(this.id, event, #{details})"
-            else 
-                return "live.handleForm(this.id, event)"
-            end 
+        def forward_submit
+            "live.handleForm(this.id, event)"
         end 
 
         # Render the element
         def to_html()
 
             Trenni::Builder.fragment do |builder|
-                builder.tag :form, method: "post", id: @id, class: 'live', onsubmit: handleForm, data: @data do
+                builder.tag :form, method: "post", id: @id, class: 'live', onsubmit:forward_submit, data: @data do
                     render(builder)
                 end
             end
