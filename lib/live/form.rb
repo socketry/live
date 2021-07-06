@@ -34,7 +34,6 @@ module Live
         # @parameter load [String] the parsed message from the view layer, 
         # which includes the details and the serialized form data.
         def handle(event, message)
-            @recieved_form = JSON.parse(message)[1].to_h
         end         
 
     end 
