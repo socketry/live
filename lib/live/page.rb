@@ -99,7 +99,7 @@ module Live
 						Console.logger.warn(self, "Could not resolve element:", message)
 					end
 				elsif id = message[:id]
-					self.handle(id, message[:event], message[:event][:details])
+					self.handle(id, message[:event])
 				else
 					Console.logger.warn(self, "Unhandled message:", message)
 				end
