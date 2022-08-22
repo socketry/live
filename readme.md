@@ -2,7 +2,7 @@
 
 Provides bi-directional live HTML views using WebSockets for communication. You can try out a [live example](https://utopia-falcon-heroku.herokuapp.com/live/index)
 
-[![Development Status](https://github.com/socketry/live/workflows/Development/badge.svg)](https://github.com/socketry/live/actions?workflow=Development)
+[![Development Status](https://github.com/socketry/live/workflows/Test/badge.svg)](https://github.com/socketry/live/actions?workflow=Test)
 
 ## Features
 
