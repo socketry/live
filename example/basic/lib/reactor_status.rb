@@ -34,7 +34,7 @@ class ReactorStatus < Live::View
 		
 		@update = Async do |task|
 			while true
-				task.sleep(1.0/10.0)
+				task.sleep(1.0/2.0)
 				self.replace!
 			end
 		end
