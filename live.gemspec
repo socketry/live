@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
 	
 	spec.required_ruby_version = ">= 2.5.0"
 	
-	spec.add_dependency "async-websocket", "~> 0.23.0"
+	spec.add_dependency "async-websocket", "~> 0.23"
 	spec.add_dependency "trenni"
 	
 	spec.add_development_dependency "async-rspec", "~> 1.1"
