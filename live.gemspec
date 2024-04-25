@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
 	spec.version = Live::VERSION
 	
 	spec.summary = "Live HTML tags updated via a WebSocket."
-	spec.authors = ["Samuel Williams"]
+	spec.authors = ["Samuel Williams", "Olle Jonsson"]
 	spec.license = "MIT"
 	
 	spec.cert_chain  = ['release.cert']
@@ -15,15 +15,14 @@ Gem::Specification.new do |spec|
 	
 	spec.homepage = "https://github.com/socketry/live"
 	
-	spec.files = Dir.glob('{lib}/**/*', File::FNM_DOTMATCH, base: __dir__)
+	spec.metadata = {
+		"source_code_uri" => "https://github.com/socketry/live.git",
+	}
 	
-	spec.required_ruby_version = ">= 2.5.0"
+	spec.files = Dir.glob(['{lib}/**/*', '*.md'], File::FNM_DOTMATCH, base: __dir__)
+	
+	spec.required_ruby_version = ">= 3.1"
 	
 	spec.add_dependency "async-websocket", "~> 0.23"
-	spec.add_dependency "trenni"
-	
-	spec.add_development_dependency "async-rspec", "~> 1.1"
-	spec.add_development_dependency "bundler"
-	spec.add_development_dependency "covered", "~> 0.10"
-	spec.add_development_dependency "rspec", "~> 3.6"
+	spec.add_dependency "xrb"
 end
