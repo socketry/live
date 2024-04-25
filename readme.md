@@ -12,7 +12,11 @@ Provides bi-directional live HTML views using WebSockets for communication. You 
 
 ## Usage
 
-Please see the [project documentation](https://socketry.github.io/live).
+Please see the [project documentation](https://socketry.github.io/live/) for more details.
+
+  - [Getting Started](https://socketry.github.io/live/guides/getting-started/index) - This guide explains how to use `live` to render dynamic content in real-time.
+
+  - [Rails Integration](https://socketry.github.io/live/guides/rails-integration/index) - This guide explains how to use the `live` gem with Ruby on Rails.
 
 ## Contributing
 
