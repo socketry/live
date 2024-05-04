@@ -9,7 +9,24 @@ require 'protocol/http/body/file'
 
 require 'live/view'
 
+class TestResolver < Live::Resolver
+	def initialize(...)
+		super
+		
+		@bound = {}
+	end
+	
+	attr :bound
+	
+	def call(id, data)
+		super.tap do |element|
+			@bound[id] = element
+		end
+	end
+end
+
 class TestTag < Live::View
+	# Used for binding the tag instance to the client-side element via the resolver.
 	def self.name
 		"TestTag"
 	end
@@ -17,12 +34,7 @@ class TestTag < Live::View
 	def bind(...)
 		super
 		
-		@clock ||= Async do
-			while true
-				self.update!
-				sleep 1
-			end
-		end
+		self.update!
 	end
 	
 	def render(builder)
@@ -51,7 +63,7 @@ describe "website" do
 		end
 	end
 	
-	let(:resolver) {Live::Resolver.allow(TestTag)}
+	let(:resolver) {TestResolver.allow(TestTag)}
 	
 	def app
 		::Protocol::HTTP::Middleware.for do |request|
@@ -70,8 +82,6 @@ describe "website" do
 	end
 	
 	it "can load website" do
-		session.implicit_wait_timeout = 10_000
-		
 		navigate_to("/index.html")
 		
 		expect(session.document_title).to be == "Live Test"
@@ -79,5 +89,37 @@ describe "website" do
 		expect(find_element(css: "#test p")).to have_attributes(
 			text: be =~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
 		)
+		
+		expect(resolver.bound).not.to be(:empty?)
+	end
+	
+	it "can prepend content" do
+		navigate_to("/index.html")
+		
+		# Wait for the page to load.
+		find_element(css: "#test p")
+		
+		tag = resolver.bound.values.first
+		
+		tag.prepend("ul.test", '<li class="prepended">Prepended</li>')
+		
+		# find_element(css: "ul.test li.prepended")
+		
+		expect(find_element(css: "ul.test").text).to be == "Prepended\nMiddle"
+	end
+	
+	it "can append content" do
+		navigate_to("/index.html")
+		
+		# Wait for the page to load.
+		find_element(css: "#test p")
+		
+		tag = resolver.bound.values.first
+		
+		tag.append("ul.test", '<li class="appended">Appended</li>')
+		
+		# find_element(css: "ul.test li.appended")
+		
+		expect(find_element(css: "ul.test").text).to be == "Middle\nAppended"
 	end
 end
