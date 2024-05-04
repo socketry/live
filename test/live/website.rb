@@ -19,7 +19,7 @@ class TestTag < Live::View
 		
 		@clock ||= Async do
 			while true
-				self.update!(reply: true)
+				self.update!
 				sleep 1
 			end
 		end
@@ -74,8 +74,8 @@ describe "website" do
 		
 		expect(session.document_title).to be == "Live Test"
 		
-		expect(find_element(css: "#test")).to have_attributes(
-			text: be == Time.now.to_s
+		expect(find_element(css: "#test p")).to have_attributes(
+			text: be =~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/
 		)
 	end
 end
