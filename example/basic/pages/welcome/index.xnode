@@ -1,6 +1,0 @@
-<page>
-	<script src="/_components/morphdom/morphdom-umd.js"></script>
-	<script src="/_components/@socketry/live/live.js"></script>
-	
-	#{attributes[:tag].to_html}
-</page>
