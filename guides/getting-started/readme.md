@@ -58,7 +58,7 @@ end
 Render the tag in your view layer:
 
 ~~~ ruby
-#{ClickCounter.new('click-counter').to_html}
+#{ClickCounter.new.to_html}
 ~~~
 
 ## Implementing the Server
@@ -70,26 +70,15 @@ On the server side, in the controller layer, we need to handle the incoming WebS
 RESOLVER = Live::Resolver.allow(ClickCounter)
 
 # At the same path as the request:
-on 'live' do |request|
-	Async::WebSocket::Adapters::Rack.open(request.env) do |connection|
-		Live::Page.new(RESOLVER).run(connection)
+run do |env|
+	if env['REQUEST_PATH'] == '/live'
+		Async::WebSocket::Adapters::Rack.open(env) do |connection|
+			Live::Page.new(RESOLVER).run(connection)
+		end
+	else
+		# Handle the normal request here...
 	end
 end
 ~~~
 
 You will need to host this using an `async`-aware server, like [Falcon](https://github.com/socketry/falcon).
-
-## Example Server
-
-You can try the included example in `example/basic`.
-
-### Start the Server
-
-``` bash
-$ cd example/basic
-$ falcon serve
-```
-
-### Connect the Browser
-
-Open `https://localhost:9292` and enjoy the example. You may like to use the inspector to see the messages going across the WebSocket connection.

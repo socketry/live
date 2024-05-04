@@ -62,7 +62,7 @@ Render the tag in your view layer:
 ```erb
 <h1>Clock</h1>
 
-<%= raw @tag.to_html %>
+<%= @tag.to_html %>
 ```
 
 ## Routes
