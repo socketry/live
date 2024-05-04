@@ -4,13 +4,18 @@
 # Copyright, 2021-2024, by Samuel Williams.
 
 require 'json'
+require 'securerandom'
 
 module Live
 	# Represents a single dynamic content area on the page.
 	class Element
+		def self.unique_id
+			SecureRandom.uuid
+		end
+		
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def initialize(id, **data)
+		def initialize(id = Element.unique_id, **data)
 			@id = id
 			@data = data
 			@data[:class] ||= self.class.name
@@ -20,6 +25,9 @@ module Live
 		
 		# The unique id within the bound page.
 		attr :id
+		
+		# The data associated with the element.
+		attr :data
 		
 		# Generate a JavaScript string which forwards the specified event to the server.
 		# @parameter details [Hash] The details associated with the forwarded event.
