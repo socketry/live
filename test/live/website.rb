@@ -19,14 +19,14 @@ class TestTag < Live::View
 		
 		@clock ||= Async do
 			while true
+				self.update!(reply: true)
 				sleep 1
-				self.update!
 			end
 		end
 	end
 	
 	def render(builder)
-		builder.tag('div') do
+		builder.tag('p') do
 			builder.text Time.now.to_s
 		end
 	end
@@ -46,7 +46,7 @@ describe "website" do
 			"text/css"
 		when ".js"
 			"application/javascript"
-		else
+		else	
 			"application/octet-stream"
 		end
 	end
@@ -74,6 +74,8 @@ describe "website" do
 		
 		expect(session.document_title).to be == "Live Test"
 		
-		sleep
+		expect(find_element(css: "#test")).to have_attributes(
+			text: be == Time.now.to_s
+		)
 	end
 end
