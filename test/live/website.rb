@@ -14,7 +14,7 @@ class TestTag < Live::View
 		"TestTag"
 	end
 	
-	def bind(page)
+	def bind(...)
 		super
 		
 		@clock ||= Async do
@@ -55,7 +55,6 @@ describe "website" do
 	
 	def app
 		::Protocol::HTTP::Middleware.for do |request|
-			Console.info(self, "Handling request", request:)
 			local_path = File.join(root, request.path)
 			
 			if File.file?(local_path)

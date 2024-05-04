@@ -50,7 +50,7 @@ module Live
 			if element = @elements[id]
 				return element.handle(event)
 			else
-				Console.logger.warn(self, "Could not handle event:", event, details)
+				Console.warn(self, "Could not handle event:", event, details)
 			end
 			
 			return nil
@@ -68,12 +68,12 @@ module Live
 				if element = self.resolve(id, data)
 					self.bind(element)
 				else
-					Console.logger.warn(self, "Could not resolve element:", message)
+					Console.warn(self, "Could not resolve element:", message)
 				end
 			elsif id = message[:id]
 				self.handle(id, message[:event])
 			else
-				Console.logger.warn(self, "Unhandled message:", message)
+				Console.warn(self, "Unhandled message:", message)
 			end
 		end
 		
@@ -82,7 +82,7 @@ module Live
 		def run(connection)
 			queue_task = Async do
 				while update = @updates.dequeue
-					Console.logger.debug(self, "Sending update:", update)
+					Console.debug(self, "Sending update:", update)
 					
 					connection.write(::Protocol::WebSocket::JSONMessage.generate(update))
 					connection.flush if @updates.empty?
@@ -90,12 +90,12 @@ module Live
 			end
 			
 			while message = connection.read
-				Console.logger.debug(self, "Reading message:", message)
+				Console.debug(self, "Reading message:", message)
 				
 				if json_message = ::Protocol::WebSocket::JSONMessage.wrap(message)
 					process_message(json_message.parse)
 				else
-					Console.logger.warn(self, "Unhandled message:", message)
+					Console.warn(self, "Unhandled message:", message)
 				end
 			end
 		ensure

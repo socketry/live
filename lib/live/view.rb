@@ -11,38 +11,38 @@ module Live
 	class View < Element
 		# Update the content of the client-side element by rendering this view.
 		def update!(**options)
-			rpc(:update, [@id, self.to_html, options])
+			rpc(:update, @id, self.to_html, options)
 		end
 		
 		# Replace the content of the client-side element by rendering this view.
 		# @parameter selector [String] The CSS selector to replace.
 		# @parameter node [String] The HTML to replace.
 		def replace(selector, node, **options)
-			rpc(:replace, [selector, node.to_s, options])
+			rpc(:replace, selector, node.to_s, options)
 		end
 		
 		# Prepend to the content of the client-side element by appending the specified element.
 		# @parameter selector [String] The CSS selector to prepend to.
 		# @parameter node [String] The HTML to prepend.
 		def prepend(selector, node, **options)
-			rpc(:prepend, [selector, node.to_s, options])
+			rpc(:prepend, selector, node.to_s, options)
 		end
 		
 		# Append to the content of the client-side element by appending the specified element.
 		# @parameter selector [String] The CSS selector to append to.
 		# @parameter node [String] The HTML to prepend.
 		def append(selector, node, **options)
-			rpc(:append, [selector, node.to_s, options])
+			rpc(:append, selector, node.to_s, options)
 		end
 		
 		# Remove the specified element from the client-side element.
 		# @parameter selector [String] The CSS selector to remove.
 		def remove(selector, **options)
-			rpc(:remove, [selector, options])
+			rpc(:remove, selector, options)
 		end
 		
 		def dispatch_event(selector, type, **options)
-			rpc(:dispatch_event, [selector, event, options])
+			rpc(:dispatch_event, selector, event, options)
 		end
 		
 		# Render the element.

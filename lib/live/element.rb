@@ -57,9 +57,9 @@ module Live
 		# Enqueue a remote procedure call to the currently bound page.
 		# @parameter method [Symbol] The name of the remote functio to invoke.
 		# @parameter arguments [Array]
-		def rpc(method, arguments)
+		def rpc(*arguments)
 			# This update might not be sent right away. Therefore, mutable arguments may be serialized to JSON at a later time (or never). This could be a race condition:
-			@page.updates.enqueue([method, arguments])
+			@page.updates.enqueue(arguments)
 		end
 	end
 end
