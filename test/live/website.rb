@@ -70,6 +70,8 @@ describe "website" do
 	end
 	
 	it "can load website" do
+		session.implicit_wait_timeout = 10_000
+		
 		navigate_to("/index.html")
 		
 		expect(session.document_title).to be == "Live Test"
