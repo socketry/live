@@ -9,21 +9,40 @@ require 'xrb/builder'
 module Live
 	# Represents a single division of content on the page an provides helpers for rendering the content.
 	class View < Element
-		# Replace the content of the client-side element by rendering this view.
-		def replace!
-			rpc(:replace, [@id, self.to_html])
+		# Update the content of the client-side element by rendering this view.
+		def update!(**options)
+			rpc(:update, @id, self.to_html, options)
 		end
 		
-		# Append to the content of the client-side element by appending the specified element.
-		# @parameter node [Live::Element] The element to append.
-		def append!(element)
-			rpc(:append, [@id, element.to_html])
+		# Replace the content of the client-side element by rendering this view.
+		# @parameter selector [String] The CSS selector to replace.
+		# @parameter node [String] The HTML to replace.
+		def replace(selector, node, **options)
+			rpc(:replace, selector, node.to_s, options)
 		end
 		
 		# Prepend to the content of the client-side element by appending the specified element.
-		# @parameter node [Live::Element] The element to prepend.
-		def prepend!(element)
-			rpc(:prepend, [@id, element.to_html])
+		# @parameter selector [String] The CSS selector to prepend to.
+		# @parameter node [String] The HTML to prepend.
+		def prepend(selector, node, **options)
+			rpc(:prepend, selector, node.to_s, options)
+		end
+		
+		# Append to the content of the client-side element by appending the specified element.
+		# @parameter selector [String] The CSS selector to append to.
+		# @parameter node [String] The HTML to prepend.
+		def append(selector, node, **options)
+			rpc(:append, selector, node.to_s, options)
+		end
+		
+		# Remove the specified element from the client-side element.
+		# @parameter selector [String] The CSS selector to remove.
+		def remove(selector, **options)
+			rpc(:remove, selector, options)
+		end
+		
+		def dispatch_event(selector, type, **options)
+			rpc(:dispatch_event, selector, event, options)
 		end
 		
 		# Render the element.
