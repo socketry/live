@@ -1,0 +1,33 @@
+{
+  "name": "@socketry/live",
+  "type": "module",
+  "version": "0.7.0",
+  "description": "Live HTML tags for Ruby.",
+  "main": "Live.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socketry/live-js.git"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0",
+    "ws": "^8.17"
+  },
+  "dependencies": {
+    "morphdom": "^2.7"
+  },
+  "keywords": [
+    "live",
+    "dynamic",
+    "html",
+    "ruby"
+  ],
+  "author": "Samuel Williams <samuel.williams@oriontransfer.co.nz> (http://www.codeotaku.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/socketry/live-js/issues"
+  },
+  "homepage": "https://github.com/socketry/live-js#readme"
+}

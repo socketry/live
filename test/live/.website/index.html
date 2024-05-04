@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Live Test</title>
+	<script type="importmap">
+	{
+		"imports": {
+			"live": "/node_modules/@socketry/live/Live.js",
+			"morphdom": "/node_modules/morphdom/dist/morphdom-esm.js"
+		}
+	}
+	</script>
+</head>
+<body>
+	<div class="live" id="test" data-class="TestTag"></div>
+	<script type="module">
+		import {Live} from 'live';
+		// Use the Live module here
+		let live = Live.start();
+	</script>
+</body>
+</html>
