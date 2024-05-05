@@ -39,7 +39,7 @@ class ClickCounter < Live::View
 	end
 	
 	# Handle a client event which was forwarded to the server:
-	def handle(event, details)
+	def handle(event)
 		@data[:count] = Integer(@data[:count]) + 1
 		
 		replace!

@@ -43,14 +43,13 @@ module Live
 		# Handle an event from the client. If the element could not be found, it is silently ignored.
 		# @parameter id [String] The unique identifier of the element which forwarded the event.
 		# @parameter event [String] The type of the event.
-		# @parameter details [Hash] The associated details if any.
 		# @returns [Object] The result of the element handler, if the element was found.
 		# @returns [Nil] If the element could not be found.
 		def handle(id, event)
 			if element = @elements[id]
 				return element.handle(event)
 			else
-				Console.warn(self, "Could not handle event:", event, details)
+				Console.warn(self, "Could not handle event:", event)
 			end
 			
 			return nil

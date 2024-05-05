@@ -30,18 +30,18 @@ module Live
 		attr :data
 		
 		# Generate a JavaScript string which forwards the specified event to the server.
-		# @parameter details [Hash] The details associated with the forwarded event.
-		def forward_event(details = nil)
-			if details
-				"live.forwardEvent(#{JSON.dump(@id)}, event, #{JSON.dump(details)})"
+		# @parameter detail [Hash] The detail associated with the forwarded event.
+		def forward_event(detail = nil)
+			if detail
+				"live.forwardEvent(#{JSON.dump(@id)}, event, #{JSON.dump(detail)})"
 			else
 				"live.forwardEvent(#{JSON.dump(@id)}, event)"
 			end
 		end
 		
-		def forward_form_event(details = nil)
-			if details
-				"live.forwardFormEvent(#{JSON.dump(@id)}, event, #{JSON.dump(details)})"
+		def forward_form_event(detail = nil)
+			if detail
+				"live.forwardFormEvent(#{JSON.dump(@id)}, event, #{JSON.dump(detail)})"
 			else
 				"live.forwardFormEvent(#{JSON.dump(@id)}, event)"
 			end
