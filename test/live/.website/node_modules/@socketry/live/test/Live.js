@@ -96,7 +96,38 @@ describe('Live', function () {
 		live.disconnect();
 	});
 	
+	it('should handle updates with child live elements', async function () {
+		const live = new Live(dom.window, webSocketServerURL);
+		
+		live.connect();
+		
+		const connected = new Promise(resolve => {
+			webSocketServer.on('connection', resolve);
+		});
+		
+		let socket = await connected;
+		
+		const reply = new Promise((resolve, reject) => {
+			socket.on('message', message => {
+				let payload = JSON.parse(message);
+				if (payload.bind) resolve(payload);
+			});
+		});
+		
+		socket.send(
+			JSON.stringify(['update', 'my', '<div id="my"><div id="mychild" class="live"></div></div>', {bind: true}])
+		);
+		
+		let binding = await reply;
+		
+		strictEqual(binding.bind, 'mychild');
+		
+		live.disconnect();
+	});
+	
 	it('should handle replacements', async function () {
+		dom.window.document.body.innerHTML = '<div id="my"><p>Hello World</p></div>';
+		
 		const live = new Live(dom.window, webSocketServerURL);
 		
 		live.connect();

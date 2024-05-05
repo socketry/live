@@ -97,9 +97,9 @@ export class Live {
 		}
 	}
 	
-	bindElementsByClassName(selector = 'live') {
+	bindElementsByClassName(parent = this.document, className = 'live') {
 		this.bind(
-			this.document.getElementsByClassName(selector)
+			parent.getElementsByClassName(className)
 		);
 		
 		this.flush();
@@ -126,7 +126,7 @@ export class Live {
 	}
 	
 	reply(options) {
-		if (options && options.reply) {
+		if (options?.reply) {
 			this.send(JSON.stringify({reply: options.reply}));
 		}
 	}
@@ -138,6 +138,8 @@ export class Live {
 		let fragment = this.createDocumentFragment(html);
 		
 		morphdom(element, fragment);
+		
+		if (options?.bind) this.bindElementsByClassName(element);
 		
 		this.reply(options);
 	}
