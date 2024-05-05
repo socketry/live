@@ -1,4 +1,3 @@
-
 import morphdom from 'morphdom';
 
 export class Live {
@@ -25,6 +24,39 @@ export class Live {
 		// Track visibility state and connect if required:
 		this.document.addEventListener("visibilitychange", () => this.handleVisibilityChange());
 		this.handleVisibilityChange();
+		
+		// Create a MutationObserver to watch for removed nodes
+		this.observer = new this.window.MutationObserver((mutationsList, observer) => {
+			for (let mutation of mutationsList) {
+				if (mutation.type === 'childList') {
+					for (let node of mutation.removedNodes) {
+						if (node.classList?.contains('live')) {
+							this.unbind(node);
+						}
+						
+						// Unbind any child nodes:
+						for (let child of node.getElementsByClassName('live')) {
+							this.unbind(child);
+						}
+					}
+					
+					for (let node of mutation.addedNodes) {
+						if (node.classList?.contains('live')) {
+							this.bind(node);
+						}
+						
+						// Bind any child nodes:
+						for (let child of node.getElementsByClassName('live')) {
+							this.bind(child);
+						}
+					}
+				}
+			}
+		});
+		
+		this.observer.observe(this.document.body, {childList: true, subtree: true});
+		
+		this.attach();
 	}
 	
 	// -- Connection Handling --
@@ -36,7 +68,7 @@ export class Live {
 		
 		server.onopen = () => {
 			this.failures = 0;
-			this.attach();
+			this.flush();
 		};
 		
 		server.onmessage = (message) => {
@@ -73,11 +105,15 @@ export class Live {
 	}
 	
 	send(message) {
-		try {
-			this.server.send(message);
-		} catch (error) {
-			this.events.push(message);
+		if (this.server) {
+			try {
+				return this.server.send(message);
+			} catch (error) {
+				// Ignore.
+			}
 		}
+		
+		this.events.push(message);
 	}
 	
 	flush() {
@@ -91,20 +127,6 @@ export class Live {
 		}
 	}
 	
-	bind(elements) {
-		for (var element of elements) {
-			this.send(JSON.stringify({bind: element.id, data: element.dataset}));
-		}
-	}
-	
-	bindElementsByClassName(parent = this.document, className = 'live') {
-		this.bind(
-			parent.getElementsByClassName(className)
-		);
-		
-		this.flush();
-	}
-	
 	handleVisibilityChange() {
 		if (this.document.hidden) {
 			this.disconnect();
@@ -113,11 +135,21 @@ export class Live {
 		}
 	}
 	
+	bind(element) {
+		console.log("bind", element.id, element.dataset);
+		
+		this.send(JSON.stringify(['bind', element.id, element.dataset]));
+	}
+	
+	unbind(element) {
+		console.log("unbind", element.id, element.dataset);
+		
+		this.send(JSON.stringify(['unbind', element.id]));
+	}
+	
 	attach() {
-		if (this.document.readyState === 'loading') {
-			this.document.addEventListener('DOMContentLoaded', () => this.bindElementsByClassName());
-		} else {
-			this.bindElementsByClassName();
+		for (let node of this.document.getElementsByClassName('live')) {
+			this.bind(node);
 		}
 	}
 	
@@ -127,7 +159,7 @@ export class Live {
 	
 	reply(options) {
 		if (options?.reply) {
-			this.send(JSON.stringify({reply: options.reply}));
+			this.send(JSON.stringify(['reply', options.reply]));
 		}
 	}
 	
@@ -138,8 +170,6 @@ export class Live {
 		let fragment = this.createDocumentFragment(html);
 		
 		morphdom(element, fragment);
-		
-		if (options?.bind) this.bindElementsByClassName(element);
 		
 		this.reply(options);
 	}
@@ -195,7 +225,7 @@ export class Live {
 		this.connect();
 		
 		this.send(
-			JSON.stringify({id: id, event: event})
+			JSON.stringify(['event', id, event])
 		);
 	}
 	

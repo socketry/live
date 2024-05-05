@@ -12,7 +12,7 @@ require 'async/websocket/adapters/http'
 require 'protocol/http'
 require 'protocol/http/body/file'
 
-require 'live/view'
+require 'live'
 
 class TestResolver < Live::Resolver
 	def initialize(...)

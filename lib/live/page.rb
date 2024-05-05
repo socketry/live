@@ -49,7 +49,7 @@ module Live
 			if element = @elements[id]
 				return element.handle(event)
 			else
-				Console.warn(self, "Could not handle event:", event)
+				Console.warn(self, "Could not handle event:", id:, event:)
 			end
 			
 			return nil
@@ -63,14 +63,26 @@ module Live
 		
 		# Process a single incoming message from the network.
 		def process_message(message)
-			if id = message[:bind] and data = message[:data]
-				if element = self.resolve(id, data)
+			case message[0]
+			when 'bind'
+				# Bind a client-side element to a server-side element.
+				if element = self.resolve(message[1], message[2])
 					self.bind(element)
 				else
 					Console.warn(self, "Could not resolve element:", message)
+					# @updates.enqueue(['error', message[1], "Could not resolve element!"])
 				end
-			elsif id = message[:id]
-				self.handle(id, message[:event])
+			when 'unbind'
+				# Unbind a client-side element from a server-side element.
+				if element = @elements.delete(message[1])
+					element.close
+				else
+					Console.warn(self, "Could not unbind element:", message)
+					@updates.enqueue(['error', message[1], "Could not unbind element!"])
+				end
+			when 'event'
+				# Handle an event from the client.
+				self.handle(message[1], message[2])
 			else
 				Console.warn(self, "Unhandled message:", message)
 			end
