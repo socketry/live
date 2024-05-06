@@ -20,16 +20,21 @@ export class Live {
 		this.events = [];
 		
 		this.failures = 0;
+		this.reconnectTimer = null;
 		
 		// Track visibility state and connect if required:
 		this.document.addEventListener("visibilitychange", () => this.handleVisibilityChange());
 		this.handleVisibilityChange();
+		
+		const elementNodeType = this.window.Node.ELEMENT_NODE;
 		
 		// Create a MutationObserver to watch for removed nodes
 		this.observer = new this.window.MutationObserver((mutationsList, observer) => {
 			for (let mutation of mutationsList) {
 				if (mutation.type === 'childList') {
 					for (let node of mutation.removedNodes) {
+						if (node.nodeType !== elementNodeType) continue;
+						
 						if (node.classList?.contains('live')) {
 							this.unbind(node);
 						}
@@ -41,7 +46,9 @@ export class Live {
 					}
 					
 					for (let node of mutation.addedNodes) {
-						if (node.classList?.contains('live')) {
+						if (node.nodeType !== elementNodeType) continue;
+						
+						if (node.classList.contains('live')) {
 							this.bind(node);
 						}
 						
@@ -55,20 +62,26 @@ export class Live {
 		});
 		
 		this.observer.observe(this.document.body, {childList: true, subtree: true});
-		
-		this.attach();
 	}
 	
 	// -- Connection Handling --
 	
 	connect() {
-		if (this.server) return this.server;
+		if (this.server) {
+			return this.server;
+		}
 		
 		let server = this.server = new this.window.WebSocket(this.url);
+		
+		if (this.reconnectTimer) {
+			clearTimeout(this.reconnectTimer);
+			this.reconnectTimer = null;
+		}
 		
 		server.onopen = () => {
 			this.failures = 0;
 			this.flush();
+			this.attach();
 		};
 		
 		server.onmessage = (message) => {
@@ -84,13 +97,18 @@ export class Live {
 		
 		server.addEventListener('close', () => {
 			// Explicit disconnect will clear `this.server`:
-			if (this.server) {
+			if (this.server && !this.reconnectTimer) {
 				// We need a minimum delay otherwise this can end up immediately invoking the callback:
 				const delay = Math.max(100 * (this.failures + 1) ** 2, 60000);
-				setTimeout(() => this.connect(), delay);
+				this.reconnectTimer = setTimeout(() => {
+					this.reconnectTimer = null;
+					this.connect();
+				}, delay);
 			}
 			
-			this.server = null;
+			if (this.server === server) {
+				this.server = null;
+			}
 		});
 		
 		return server;
@@ -102,6 +120,11 @@ export class Live {
 			this.server = null;
 			server.close();
 		}
+		
+		if (this.reconnectTimer) {
+			clearTimeout(this.reconnectTimer);
+			this.reconnectTimer = null;
+		}
 	}
 	
 	send(message) {
@@ -109,7 +132,7 @@ export class Live {
 			try {
 				return this.server.send(message);
 			} catch (error) {
-				// Ignore.
+				// console.log("Live.send", "failed to send message to server", error);
 			}
 		}
 		
@@ -144,7 +167,9 @@ export class Live {
 	unbind(element) {
 		console.log("unbind", element.id, element.dataset);
 		
-		this.send(JSON.stringify(['unbind', element.id]));
+		if (this.server) {
+			this.send(JSON.stringify(['unbind', element.id]));
+		}
 	}
 	
 	attach() {
