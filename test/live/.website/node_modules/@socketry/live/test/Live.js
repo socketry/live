@@ -117,6 +117,35 @@ describe('Live', function () {
 		live.disconnect();
 	});
 	
+	it('can execute scripts', async function () {
+		const live = new Live(dom.window, webSocketServerURL);
+		
+		live.connect();
+		
+		const connected = new Promise(resolve => {
+			webSocketServer.on('connection', resolve);
+		});
+		
+		let socket = await connected;
+		
+		socket.send(
+			JSON.stringify(['script', 'my', 'return 1+2', {reply: true}])
+		);
+		
+		let successReply = await messages.popUntil(message => message[0] == 'reply');
+		strictEqual(successReply[2], 3);
+		
+		socket.send(
+			JSON.stringify(['script', 'my', 'throw new Error("Test Error")', {reply: true}])
+		);
+		
+		let errorReply = await messages.popUntil(message => message[0] == 'reply');
+		strictEqual(errorReply[2], null);
+		console.log(errorReply);
+		
+		live.disconnect();
+	});
+	
 	it('should handle updates', async function () {
 		const live = new Live(dom.window, webSocketServerURL);
 		

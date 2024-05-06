@@ -9,6 +9,10 @@ require 'xrb/builder'
 module Live
 	# Represents a single division of content on the page an provides helpers for rendering the content.
 	class View < Element
+		def script(code, **options)
+			rpc(:script, @id, code, options)
+		end
+		
 		# Update the content of the client-side element by rendering this view.
 		def update!(**options)
 			rpc(:update, @id, self.to_html, options)

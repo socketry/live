@@ -127,4 +127,17 @@ describe "website" do
 		
 		expect(find_element(css: "ul.test").text).to be == "Middle\nAppended"
 	end
+	
+	it "can execute scripts" do
+		navigate_to("/index.html")
+		
+		# Wait for the page to load.
+		find_element(css: "#test p")
+		
+		tag = resolver.bound.values.first
+		
+		tag.script("document.title = 'Executed'")
+		
+		expect(session.document_title).to be == "Executed"
+	end
 end

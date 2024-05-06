@@ -94,9 +94,9 @@ export class Live {
 		};
 		
 		server.onmessage = (message) => {
-			const [name, ..._arguments] = JSON.parse(message.data);
+			const [name, ...args] = JSON.parse(message.data);
 			
-			this[name](..._arguments);
+			this[name](...args);
 		};
 		
 		// The remote end has disconnected:
@@ -191,13 +191,25 @@ export class Live {
 		return this.#document.createRange().createContextualFragment(html);
 	}
 	
-	#reply(options) {
+	#reply(options, ...args) {
 		if (options?.reply) {
-			this.#send(JSON.stringify(['reply', options.reply]));
+			this.#send(JSON.stringify(['reply', options.reply, ...args]));
 		}
 	}
 	
 	// -- RPC Methods --
+	
+	script(id, code, options) {
+		let element = this.#document.getElementById(id);
+		
+		try {
+			let result = this.#window.Function(code).call(element);
+			
+			this.#reply(options, result);
+		} catch (error) {
+			this.#reply(options, null, {name: error.name, message: error.message, stack: error.stack});
+		}
+	}
 	
 	update(id, html, options) {
 		let element = this.#document.getElementById(id);
