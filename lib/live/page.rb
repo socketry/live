@@ -70,7 +70,7 @@ module Live
 					self.bind(element)
 				else
 					Console.warn(self, "Could not resolve element:", message)
-					# @updates.enqueue(['error', message[1], "Could not resolve element!"])
+					@updates.enqueue(['error', message[1], "Could not resolve element!"])
 				end
 			when 'unbind'
 				# Unbind a client-side element from a server-side element.
