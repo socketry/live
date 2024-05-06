@@ -1,7 +1,7 @@
 {
   "name": "@socketry/live",
   "type": "module",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Live HTML tags for Ruby.",
   "main": "Live.js",
   "repository": {

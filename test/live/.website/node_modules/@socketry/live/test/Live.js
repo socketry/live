@@ -85,9 +85,9 @@ describe('Live', function () {
 		const live = Live.start({window: dom.window, base: 'http://localhost/'});
 		ok(live);
 		
-		strictEqual(live.window, dom.window);
-		strictEqual(live.document, dom.window.document);
 		strictEqual(live.url.href, 'ws://localhost/live');
+		
+		live.disconnect();
 	});
 	
 	it('should connect to the WebSocket server', function () {
@@ -102,25 +102,16 @@ describe('Live', function () {
 	it('should handle visibility changes', async function () {
 		const live = new Live(dom.window, webSocketServerURL);
 		
-		let hidden = false;
-		Object.defineProperty(dom.window.document, "hidden", {
-			get() {return hidden},
-		});
+		// It's tricky to test the method directly.
+		// - Changing document.hidden is a hack.
+		// - Sending custom events seems to cause a hang.
 		
-		// The document starts out hidden... we have defined a property to make it not hidden, let's propagate that change:
-		live.handleVisibilityChange();
-		
-		// We should receive a bind message for the live element:
+		live.connect();
 		deepStrictEqual(await messages.pop(), ['bind', 'my', {}]);
 		
-		hidden = true;
-		live.handleVisibilityChange();
-		ok(!live.server);
+		live.disconnect();
 		
-		hidden = false;
-		live.handleVisibilityChange();
-		ok(live.server);
-		
+		live.connect()
 		deepStrictEqual(await messages.pop(), ['bind', 'my', {}]);
 		
 		live.disconnect();
@@ -178,7 +169,10 @@ describe('Live', function () {
 		
 		dom.window.document.getElementById('my').remove();
 		
-		let payload = await messages.popUntil(message => message[0] == 'unbind');
+		let payload = await messages.popUntil(message => {
+			return message[0] == 'unbind' && message[1] == 'my';
+		});
+		
 		deepStrictEqual(payload, ['unbind', 'my']);
 		
 		live.disconnect();
@@ -324,5 +318,11 @@ describe('Live', function () {
 		strictEqual(payload[2].type, 'click');
 		
 		live.disconnect();
+	});
+	
+	it ('can log errors', function () {
+		const live = new Live(dom.window, webSocketServerURL);
+		
+		live.error('my', 'Test Error');
 	});
 });
