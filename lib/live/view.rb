@@ -17,22 +17,28 @@ module Live
 		# Replace the content of the client-side element by rendering this view.
 		# @parameter selector [String] The CSS selector to replace.
 		# @parameter node [String] The HTML to replace.
-		def replace(selector, node, **options)
-			rpc(:replace, selector, node.to_s, options)
+		def replace(selector, fragment = nil, **options, &block)
+			fragment ||= XRB::Builder.fragment(&block)
+			
+			rpc(:replace, selector, fragment.to_s, options)
 		end
 		
 		# Prepend to the content of the client-side element by appending the specified element.
 		# @parameter selector [String] The CSS selector to prepend to.
 		# @parameter node [String] The HTML to prepend.
-		def prepend(selector, node, **options)
-			rpc(:prepend, selector, node.to_s, options)
+		def prepend(selector, fragment = nil, **options, &block)
+			fragment ||= XRB::Builder.fragment(&block)
+			
+			rpc(:prepend, selector, fragment.to_s, options)
 		end
 		
 		# Append to the content of the client-side element by appending the specified element.
 		# @parameter selector [String] The CSS selector to append to.
 		# @parameter node [String] The HTML to prepend.
-		def append(selector, node, **options)
-			rpc(:append, selector, node.to_s, options)
+		def append(selector, fragment = nil, **options, &block)
+			fragment ||= XRB::Builder.fragment(&block)
+			
+			rpc(:append, selector, fragment.to_s, options)
 		end
 		
 		# Remove the specified element from the client-side element.
