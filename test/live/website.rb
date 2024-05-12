@@ -140,4 +140,20 @@ describe "website" do
 		
 		expect(session.document_title).to be == "Executed"
 	end
+	
+	it "can handle disconnects" do
+		navigate_to("/index.html")
+		
+		# Wait for the page to load.
+		find_element(css: "#test p")
+		
+		tag = resolver.bound.values.first
+		
+		# Disconnect the session:
+		navigate_to("about:blank")
+		
+		expect do
+			tag.update!
+		end.to raise_exception(Live::PageError, message: be =~ /not bound/)
+	end
 end

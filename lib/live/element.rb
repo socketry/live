@@ -7,6 +7,9 @@ require 'json'
 require 'securerandom'
 
 module Live
+	class PageError < RuntimeError
+	end
+	
 	# Represents a single dynamic content area on the page.
 	class Element
 		def self.unique_id
@@ -66,8 +69,13 @@ module Live
 		# @parameter method [Symbol] The name of the remote functio to invoke.
 		# @parameter arguments [Array]
 		def rpc(*arguments)
-			# This update might not be sent right away. Therefore, mutable arguments may be serialized to JSON at a later time (or never). This could be a race condition:
-			@page.updates.enqueue(arguments)
+			if @page
+				# This update might not be sent right away. Therefore, mutable arguments may be serialized to JSON at a later time (or never). This could be a race condition:
+				@page.updates.enqueue(arguments)
+			else
+				# This is a programming error, as it probably means the element is still part of the logic of the server side (e.g. async loop), but it is not bound to a page, so there is nothing to update/access/rpc.
+				raise PageError, "Element is not bound to a page, make sure to implement #close!"
+			end
 		end
 	end
 end
