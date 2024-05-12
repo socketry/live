@@ -68,5 +68,11 @@ module Live
 				end
 			end
 		end
+		
+		# Convenience method for rendering the view as a string.
+		# @returns [String] The generated HTML.
+		def to_s
+			to_html.to_s
+		end
 	end
 end
