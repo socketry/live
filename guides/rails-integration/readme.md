@@ -7,11 +7,7 @@ This guide explains how to use the `live` gem with Ruby on Rails.
 Here is a simple implementation of a real-time clock tag:
 
 ```ruby
-class ClockTag < Live::Tag
-	def initialize(name)
-		@name = name
-	end
-	
+class ClockTag < Live::View
 	def bind(page)
 		super
 		
@@ -19,7 +15,7 @@ class ClockTag < Live::Tag
 		Async do
 			while true
 				sleep 1
-				replace!
+				update!
 			end
 		end
 	end
