@@ -92,21 +92,23 @@ module Live
 		# Run the event handling loop with the given websocket connection.
 		# @parameter connection [Async::WebSocket::Connection]
 		def run(connection)
-			queue_task = Async do
-				while update = @updates.dequeue
-					Console.debug(self, "Sending update:", update)
-					::Protocol::WebSocket::TextMessage.generate(update).send(connection)
-					connection.flush if @updates.empty?
+			Sync do |task|
+				queue_task = task.async do
+					while update = @updates.dequeue
+						Console.debug(self, "Sending update:", update)
+						::Protocol::WebSocket::TextMessage.generate(update).send(connection)
+						connection.flush if @updates.empty?
+					end
 				end
+				
+				while message = connection.read
+					Console.debug(self, "Reading message:", message)
+					process_message(message.parse)
+				end
+			ensure
+				self.close
+				queue_task&.stop
 			end
-			
-			while message = connection.read
-				Console.debug(self, "Reading message:", message)
-				process_message(message.parse)
-			end
-		ensure
-			self.close
-			queue_task&.stop
 		end
 	end
 end
