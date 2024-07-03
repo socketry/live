@@ -9,7 +9,8 @@ require_relative 'resolver'
 require 'async'
 require 'async/queue'
 
-require 'protocol/websocket/json_message'
+require 'protocol/websocket'
+require 'protocol/websocket/message'
 
 module Live
 	# Represents a connected client page with bound dynamic content areas.
@@ -94,20 +95,14 @@ module Live
 			queue_task = Async do
 				while update = @updates.dequeue
 					Console.debug(self, "Sending update:", update)
-					
-					connection.write(::Protocol::WebSocket::JSONMessage.generate(update))
+					::Protocol::WebSocket::TextMessage.generate(update).send(connection)
 					connection.flush if @updates.empty?
 				end
 			end
 			
 			while message = connection.read
 				Console.debug(self, "Reading message:", message)
-				
-				if json_message = ::Protocol::WebSocket::JSONMessage.wrap(message)
-					process_message(json_message.parse)
-				else
-					Console.warn(self, "Unhandled message:", message)
-				end
+				process_message(message.parse)
 			end
 		ensure
 			self.close
