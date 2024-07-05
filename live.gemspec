@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
 	spec.version = Live::VERSION
 	
 	spec.summary = "Live HTML tags updated via a WebSocket."
-	spec.authors = ["Samuel Williams", "Olle Jonsson"]
+	spec.authors = ["Samuel Williams", "Olle Jonsson", "Tatsuhiro Ujihisa"]
 	spec.license = "MIT"
 	
 	spec.cert_chain  = ['release.cert']
