@@ -38,6 +38,10 @@ This project is governed by the [Contributor Covenant](https://www.contributor-c
 
 ## See Also
 
-  - [live-js](https://github.com/socketry/live-js) — The client-side JavaScript library.
-  - [morphdom](https://github.com/patrick-steele-idem/morphdom) — Efficiently update the client-side HTML.
+  - [live-js](https://github.com/socketry/live-js) – The client-side JavaScript library.
+  - [morphdom](https://github.com/patrick-steele-idem/morphdom) – Efficiently update the client-side HTML.
   - [stimulus-reflex](https://github.com/hopsoft/stimulus_reflex) — An alternative framework which provides similar functionality.
+
+### Examples
+
+  - [Flappy Bird](https://github.com/socketry/flappy-bird) – A clone of the classic Flappy Bird game.
