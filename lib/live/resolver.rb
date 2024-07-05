@@ -43,7 +43,7 @@ module Live
 		# @returns [Element] The element instance if it was allowed.
 		def call(id, data)
 			if klass = @allowed[data[:class]]
-				return klass.new(id, **data)
+				return klass.new(id, data)
 			end
 		end
 	end

@@ -20,6 +20,8 @@ module Live
 			@resolver = resolver
 			
 			@elements = {}
+			@attached = {}
+			
 			@updates = Async::Queue.new
 		end
 		
@@ -34,11 +36,25 @@ module Live
 			element.bind(self)
 		end
 		
+		# Attach a pre-existing element to the page, so that it may later be bound to this exact instance.
+		# You must later detach the element when it is no longer needed.
+		def attach(element)
+			@attached[element.id] = element
+		end
+		
+		def detach(element)
+			if @attached.delete(element.id)
+				element.close
+			end
+		end
+		
 		# Resolve a client-side element to a server side instance.
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def resolve(id, data)
-			@resolver.call(id, data)
+		def resolve(id, data = {})
+			@attached.fetch(id) do
+				@resolver.call(id, data)
+			end
 		end
 		
 		# Handle an event from the client. If the element could not be found, it is silently ignored.
@@ -76,7 +92,7 @@ module Live
 			when 'unbind'
 				# Unbind a client-side element from a server-side element.
 				if element = @elements.delete(message[1])
-					element.close
+					element.close unless @attached.key?(message[1])
 				else
 					Console.warn(self, "Could not unbind element:", message)
 					@updates.enqueue(['error', message[1], "Could not unbind element!"])

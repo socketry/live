@@ -16,13 +16,18 @@ module Live
 			SecureRandom.uuid
 		end
 		
+		def self.mount(parent, id, data = {})
+			full_id = parent.id + ":" + id
+			
+			self.new(full_id, data)
+		end
+		
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def initialize(id = Element.unique_id, **data)
+		def initialize(id = Element.unique_id, data = {})
 			@id = id
 			@data = data
 			@data[:class] ||= self.class.name
-			
 			@page = nil
 		end
 		
@@ -31,6 +36,9 @@ module Live
 		
 		# The data associated with the element.
 		attr :data
+		
+		# @attribute [Page | Nil] The page this elemenet is bound to.
+		attr :page
 		
 		# Generate a JavaScript string which forwards the specified event to the server.
 		# @parameter detail [Hash] The detail associated with the forwarded event.
@@ -76,6 +84,71 @@ module Live
 				# This is a programming error, as it probably means the element is still part of the logic of the server side (e.g. async loop), but it is not bound to a page, so there is nothing to update/access/rpc.
 				raise PageError, "Element is not bound to a page, make sure to implement #close!"
 			end
+		end
+		
+		def script(code, **options)
+			rpc(:script, @id, code, options)
+		end
+		
+		# Update the content of the client-side element by rendering this view.
+		def update!(**options)
+			rpc(:update, @id, self.to_html, options)
+		end
+		
+		# Replace the content of the client-side element by rendering this view.
+		# @parameter selector [String] The CSS selector to replace.
+		# @parameter node [String] The HTML to replace.
+		def replace(selector, fragment = nil, **options, &block)
+			fragment ||= XRB::Builder.fragment(&block)
+			
+			rpc(:replace, selector, fragment.to_s, options)
+		end
+		
+		# Prepend to the content of the client-side element by appending the specified element.
+		# @parameter selector [String] The CSS selector to prepend to.
+		# @parameter node [String] The HTML to prepend.
+		def prepend(selector, fragment = nil, **options, &block)
+			fragment ||= XRB::Builder.fragment(&block)
+			
+			rpc(:prepend, selector, fragment.to_s, options)
+		end
+		
+		# Append to the content of the client-side element by appending the specified element.
+		# @parameter selector [String] The CSS selector to append to.
+		# @parameter node [String] The HTML to prepend.
+		def append(selector, fragment = nil, **options, &block)
+			fragment ||= XRB::Builder.fragment(&block)
+			
+			rpc(:append, selector, fragment.to_s, options)
+		end
+		
+		# Remove the specified element from the client-side element.
+		# @parameter selector [String] The CSS selector to remove.
+		def remove(selector, **options)
+			rpc(:remove, selector, options)
+		end
+		
+		def dispatch_event(selector, type, **options)
+			rpc(:dispatch_event, selector, event, options)
+		end
+		
+		# Render the element.
+		# @parameter builder [XRB::Builder] The HTML builder.
+		def render(builder)
+			builder.text(self.class.name)
+		end
+		
+		# @returns [Object] The generated HTML.
+		def to_html
+			XRB::Builder.fragment do |builder|
+				render(builder)
+			end
+		end
+		
+		# Convenience method for rendering the view as a string.
+		# @returns [String] The generated HTML.
+		def to_s
+			to_html.to_s
 		end
 	end
 end

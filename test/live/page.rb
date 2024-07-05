@@ -7,6 +7,9 @@ require 'live/page'
 require 'live/view'
 require 'live/resolver'
 
+class MyView < Live::View
+end
+
 describe Live::Page do
 	let(:resolver) {Live::Resolver.new}
 	
@@ -21,6 +24,18 @@ describe Live::Page do
 		
 		it "ignores non-allowed elements" do
 			expect(page.resolve('live-view', {class: 'Live::View'})).to be_nil
+		end
+	end
+	
+	with '#attach' do
+		let(:view) {MyView.new}
+		
+		it "can resolve attached elements" do
+			page.attach(view)
+			expect(page.resolve(view.id)).to be_equal(view)
+			
+			page.detach(view)
+			expect(page.resolve(view.id)).to be_nil
 		end
 	end
 end

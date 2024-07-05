@@ -17,7 +17,7 @@ describe Live::Element do
 	end
 	
 	it "can be initialized with an id and data" do
-		element = subject.new("test", name: "Test")
+		element = subject.new("test", {name: "Test"})
 		
 		expect(element.id).to be == "test"
 		expect(element.data[:name]).to be == "Test"
@@ -28,5 +28,14 @@ describe Live::Element do
 		
 		expect(element.id).to be_a(String)
 		expect(element.data[:class]).to be == "Live::Element"
+	end
+	
+	with "#mount" do
+		it "can mount subview" do
+			parent = subject.new("parent")
+			child = subject.mount(parent, "child")
+			
+			expect(child.id).to be == "parent:child"
+		end
 	end
 end
