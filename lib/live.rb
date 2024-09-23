@@ -5,6 +5,6 @@
 
 require_relative "live/version"
 
-require_relative 'live/page'
-require_relative 'live/view'
-require_relative 'live/resolver'
+require_relative "live/page"
+require_relative "live/view"
+require_relative "live/resolver"

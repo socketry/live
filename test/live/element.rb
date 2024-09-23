@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'live/element'
+require "live/element"
 
 describe Live::Element do
 	it "can generate a unique id" do

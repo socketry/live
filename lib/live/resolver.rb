@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2021-2024, by Samuel Williams.
 
-require_relative 'element'
+require_relative "element"
 
 module Live
 	# Resolves a client-side tag into a server-side instance.

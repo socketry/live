@@ -3,16 +3,16 @@
 # Released under the MIT License.
 # Copyright, 2021-2024, by Samuel Williams.
 
-require_relative 'element'
-require_relative 'resolver'
+require_relative "element"
+require_relative "resolver"
 
-require 'async'
-require 'async/queue'
+require "async"
+require "async/queue"
 
-require 'protocol/websocket'
-require 'protocol/websocket/message'
+require "protocol/websocket"
+require "protocol/websocket/message"
 
-require 'console/event/failure'
+require "console/event/failure"
 
 module Live
 	# Represents a connected client page with bound dynamic content areas.
@@ -87,23 +87,23 @@ module Live
 		# Process a single incoming message from the network.
 		def process_message(message)
 			case message[0]
-			when 'bind'
+			when "bind"
 				# Bind a client-side element to a server-side element.
 				if element = self.resolve(message[1], message[2])
 					self.bind(element)
 				else
 					Console.warn(self, "Could not resolve element:", message)
-					@updates.enqueue(['error', message[1], "Could not resolve element!"])
+					@updates.enqueue(["error", message[1], "Could not resolve element!"])
 				end
-			when 'unbind'
+			when "unbind"
 				# Unbind a client-side element from a server-side element.
 				if element = @elements.delete(message[1])
 					element.close unless @attached.key?(message[1])
 				else
 					Console.warn(self, "Could not unbind element:", message)
-					@updates.enqueue(['error', message[1], "Could not unbind element!"])
+					@updates.enqueue(["error", message[1], "Could not unbind element!"])
 				end
-			when 'event'
+			when "event"
 				# Handle an event from the client.
 				self.handle(message[1], message[2])
 			else

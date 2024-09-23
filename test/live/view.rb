@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'live/view'
+require "live/view"
 
 describe Live::View do
-	let(:view) {subject.new('test-id')}
+	let(:view) {subject.new("test-id")}
 	
 	with "#to_s" do
 		it "can generate string representation" do

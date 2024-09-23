@@ -3,16 +3,16 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'sus/fixtures/async/http/server_context'
-require 'sus/fixtures/async/webdriver/session_context'
+require "sus/fixtures/async/http/server_context"
+require "sus/fixtures/async/webdriver/session_context"
 
-require 'async/websocket'
-require 'async/websocket/adapters/http'
+require "async/websocket"
+require "async/websocket/adapters/http"
 
-require 'protocol/http'
-require 'protocol/http/body/file'
+require "protocol/http"
+require "protocol/http/body/file"
 
-require 'live'
+require "live"
 
 class TestResolver < Live::Resolver
 	def initialize(...)
@@ -43,7 +43,7 @@ class TestTag < Live::View
 	end
 	
 	def render(builder)
-		builder.tag('p') do
+		builder.tag("p") do
 			builder.text Time.now.to_s
 		end
 	end
@@ -75,13 +75,13 @@ describe "website" do
 			local_path = File.join(root, request.path)
 			
 			if File.file?(local_path)
-				Protocol::HTTP::Response[200, {'content-type' => content_type(local_path)}, ::Protocol::HTTP::Body::File.open(local_path)]
+				Protocol::HTTP::Response[200, {"content-type" => content_type(local_path)}, ::Protocol::HTTP::Body::File.open(local_path)]
 			elsif request.path == "/live"
 				Async::WebSocket::Adapters::HTTP.open(request) do |connection|
 					Live::Page.new(resolver).run(connection)
 				end
 			else
-				Protocol::HTTP::Response[404, {'content-type' => 'text/plain'}, ["Not found"]]
+				Protocol::HTTP::Response[404, {"content-type" => "text/plain"}, ["Not found"]]
 			end
 		end
 	end
