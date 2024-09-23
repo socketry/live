@@ -12,6 +12,8 @@ require 'async/queue'
 require 'protocol/websocket'
 require 'protocol/websocket/message'
 
+require 'console/event/failure'
+
 module Live
 	# Represents a connected client page with bound dynamic content areas.
 	class Page
@@ -74,7 +76,11 @@ module Live
 		
 		def close
 			@elements.each do |id, element|
-				element.close
+				begin
+					element.close
+				rescue => error
+					Console::Event::Failure.for(error).emit(self)
+				end
 			end
 		end
 		
@@ -111,14 +117,14 @@ module Live
 			Sync do |task|
 				queue_task = task.async do
 					while update = @updates.dequeue
-						Console.debug(self, "Sending update:", update)
 						::Protocol::WebSocket::TextMessage.generate(update).send(connection)
+						
+						# Flush the output if there are no more updates:
 						connection.flush if @updates.empty?
 					end
 				end
 				
 				while message = connection.read
-					Console.debug(self, "Reading message:", message)
 					process_message(message.parse)
 				end
 			ensure
