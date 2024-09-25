@@ -27,9 +27,6 @@ module Live
 			@updates = Async::Queue.new
 		end
 		
-		# The queue of outstanding events to be sent to the client.
-		attr :updates
-		
 		# Bind a client-side element to a server side element.
 		# @parameter element [Live::Element] The element to bind.
 		def bind(element)
@@ -84,6 +81,10 @@ module Live
 			end
 		end
 		
+		def enqueue(update)
+			@updates.enqueue(::Protocol::WebSocket::TextMessage.generate(update))
+		end
+		
 		# Process a single incoming message from the network.
 		def process_message(message)
 			case message[0]
@@ -93,7 +94,7 @@ module Live
 					self.bind(element)
 				else
 					Console.warn(self, "Could not resolve element:", message)
-					@updates.enqueue(["error", message[1], "Could not resolve element!"])
+					self.enqueue(["error", message[1], "Could not resolve element!"])
 				end
 			when "unbind"
 				# Unbind a client-side element from a server-side element.
@@ -101,7 +102,7 @@ module Live
 					element.close unless @attached.key?(message[1])
 				else
 					Console.warn(self, "Could not unbind element:", message)
-					@updates.enqueue(["error", message[1], "Could not unbind element!"])
+					self.enqueue(["error", message[1], "Could not unbind element!"])
 				end
 			when "event"
 				# Handle an event from the client.
@@ -119,11 +120,7 @@ module Live
 				
 				queue_task = task.async do
 					while update = @updates.dequeue
-						if update == :ping
-							connection.send_ping
-						else
-							::Protocol::WebSocket::TextMessage.generate(update).send(connection)
-						end
+						update.send(connection)
 						
 						# Flush the output if there are no more updates:
 						if @updates.empty?
@@ -140,7 +137,7 @@ module Live
 						
 						# We synchronize all writes to the update queue:
 						if duration > keep_alive
-							@updates.enqueue(:ping)
+							@updates.enqueue(::Protocol::WebSocket::PingMessage.new)
 						end
 					end
 				end

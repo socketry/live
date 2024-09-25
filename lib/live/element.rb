@@ -79,7 +79,7 @@ module Live
 		def rpc(*arguments)
 			if @page
 				# This update might not be sent right away. Therefore, mutable arguments may be serialized to JSON at a later time (or never). This could be a race condition:
-				@page.updates.enqueue(arguments)
+				@page.enqueue(arguments)
 			else
 				# This is a programming error, as it probably means the element is still part of the logic of the server side (e.g. async loop), but it is not bound to a page, so there is nothing to update/access/rpc.
 				raise PageError, "Element is not bound to a page, make sure to implement #close!"
