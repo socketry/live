@@ -113,22 +113,47 @@ module Live
 		
 		# Run the event handling loop with the given websocket connection.
 		# @parameter connection [Async::WebSocket::Connection]
-		def run(connection)
+		def run(connection, keep_alive: 10)
 			Sync do |task|
+				last_update = Async::Clock.now
+				
 				queue_task = task.async do
 					while update = @updates.dequeue
-						::Protocol::WebSocket::TextMessage.generate(update).send(connection)
+						if update == :ping
+							connection.send_ping
+						else
+							::Protocol::WebSocket::TextMessage.generate(update).send(connection)
+						end
 						
 						# Flush the output if there are no more updates:
-						connection.flush if @updates.empty?
+						if @updates.empty?
+							connection.flush
+						end
+					end
+				end
+				
+				keep_alive_task = task.async do
+					while true
+						sleep(keep_alive)
+						
+						duration = Async::Clock.now - last_update
+						
+						# We synchronize all writes to the update queue:
+						if duration > keep_alive
+							@updates.enqueue(:ping)
+						end
 					end
 				end
 				
 				while message = connection.read
+					last_update = Async::Clock.now
 					process_message(message.parse)
 				end
 			ensure
+				keep_alive_task&.stop
+				
 				self.close
+				
 				queue_task&.stop
 			end
 		end

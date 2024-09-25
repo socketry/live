@@ -7,6 +7,10 @@ require "live/page"
 require "live/view"
 require "live/resolver"
 
+require "async/websocket/client"
+require "async/websocket/adapters/http"
+require "sus/fixtures/async/http/server_context"
+
 class MyView < Live::View
 end
 
@@ -36,6 +40,28 @@ describe Live::Page do
 			
 			page.detach(view)
 			expect(page.resolve(view.id)).to be_nil
+		end
+	end
+	
+	with "a server" do
+		include Sus::Fixtures::Async::HTTP::ServerContext
+		
+		let(:app) do
+			::Protocol::HTTP::Middleware.for do |request|
+				Async::WebSocket::Adapters::HTTP.open(request) do |connection|
+					Live::Page.new(resolver).run(connection, keep_alive: 0.001)
+				end
+			end
+		end
+		
+		it "can connect to server and receives ping" do
+			Async::WebSocket::Client.connect(client_endpoint) do |connection|
+				expect(connection).to receive(:receive_ping)
+				
+				frame = connection.read_frame
+				
+				expect(frame).to be_a(Protocol::WebSocket::PingFrame)
+			end
 		end
 	end
 end
