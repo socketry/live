@@ -138,11 +138,17 @@ module Live
 			builder.text(self.class.name)
 		end
 		
+		def append_markup(output)
+			build_markup(::XRB::Builder.new(output))
+		end
+		
+		def build_markup(builder)
+			render(builder)
+		end
+		
 		# @returns [Object] The generated HTML.
 		def to_html
-			XRB::Builder.fragment do |builder|
-				render(builder)
-			end
+			XRB::Builder.fragment(&self.method(:build_markup))
 		end
 		
 		# Convenience method for rendering the view as a string.

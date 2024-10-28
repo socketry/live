@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
 	
 	spec.add_dependency "async-websocket", "~> 0.27"
 	spec.add_dependency "protocol-websocket", "~> 0.19"
-	spec.add_dependency "xrb"
+	spec.add_dependency "xrb", "~> 0.10"
 end

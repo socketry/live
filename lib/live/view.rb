@@ -10,11 +10,9 @@ module Live
 	# Represents a single division of content on the page an provides helpers for rendering the content.
 	class View < Element
 		# @returns [Object] The generated HTML.
-		def to_html
-			XRB::Builder.fragment do |builder|
-				builder.inline_tag :div, id: @id, class: "live", data: @data do
-					render(builder)
-				end
+		def build_markup(builder)
+			builder.inline_tag :div, id: @id, class: "live", data: @data do
+				render(builder)
 			end
 		end
 	end
