@@ -150,7 +150,7 @@ describe "website" do
 		tag = resolver.bound.values.first
 		
 		# Disconnect the session:
-		navigate_to("about:blank")
+		2.times{navigate_to("about:blank")}
 		
 		expect do
 			tag.update!
