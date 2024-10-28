@@ -1,0 +1,3 @@
+lively:
+  url: https://github.com/socketry/lively
+  command: bundle exec sus
