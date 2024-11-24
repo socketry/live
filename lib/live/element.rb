@@ -16,19 +16,23 @@ module Live
 			SecureRandom.uuid
 		end
 		
+		# Create a new root element with a convenient syntax for specifying the id and data.
+		#
+		# @parameter id [String] The unique identifier within the page.
+		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
+		def self.root(id = self.unique_id, **data)
+			self.new(id, data)
+		end
+		
 		# Mount an element within a parent element.
-		def self.mount(parent, id, data = {})
+		def self.child(parent, id = self.unique_id, **data)
 			full_id = parent.id + ":" + id
 			
 			self.new(full_id, data)
 		end
 		
-		# Create a new element with a convenient syntax for specifying the id and data.
-		#
-		# @parameter id [String] The unique identifier within the page.
-		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def self.[](id = self.unique_id, **data)
-			self.new(id, data)
+		def self.mount(parent, id, data = {})
+			self.child(parent, id, **data)
 		end
 		
 		# Initialize the element with the specified id and data.
