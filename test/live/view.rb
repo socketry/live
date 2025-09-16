@@ -11,7 +11,7 @@ describe Live::View do
 	with "#to_s" do
 		it "can generate string representation" do
 			expect(view.to_s).to be == <<~HTML.chomp
-				<div id="test-id" class="live" data-class="Live::View">Live::View</div>
+				<live-view id="test-id" data-class="Live::View">Live::View</live-view>
 			HTML
 		end
 	end

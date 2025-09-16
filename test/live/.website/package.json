@@ -1,5 +1,5 @@
 {
 	"dependencies": {
-		"@socketry/live": "^0.13"
+		"@socketry/live": "^0.16"
 	}
 }

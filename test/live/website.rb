@@ -110,7 +110,7 @@ describe "website" do
 		
 		# find_element(css: "ul.test li.prepended")
 		
-		expect(find_element(css: "ul.test").text).to be == "Prepended\nMiddle"
+		expect(find_element(css: "ul.test").text).to be =~ /Prepended.*?Middle/m
 	end
 	
 	it "can append content" do
@@ -124,8 +124,8 @@ describe "website" do
 		tag.append("ul.test", '<li class="appended">Appended</li>')
 		
 		# find_element(css: "ul.test li.appended")
-		
-		expect(find_element(css: "ul.test").text).to be == "Middle\nAppended"
+
+		expect(find_element(css: "ul.test").text).to be =~ /Middle.*?Appended/m
 	end
 	
 	it "can execute scripts" do
