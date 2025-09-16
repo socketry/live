@@ -9,9 +9,13 @@ require "xrb/builder"
 module Live
 	# Represents a single division of content on the page an provides helpers for rendering the content.
 	class View < Element
+		def tag_name
+			"live-view"
+		end
+		
 		# @returns [Object] The generated HTML.
 		def build_markup(builder)
-			builder.inline_tag :div, id: @id, class: "live", data: @data do
+			builder.inline_tag self.tag_name, id: @id, data: @data do
 				render(builder)
 			end
 		end
