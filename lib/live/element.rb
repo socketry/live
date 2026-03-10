@@ -84,13 +84,13 @@ module Live
 			@page = nil
 		end
 		
-		# Handle a client event, typically as triggered by {#forward}.
+		# Handle a client event, typically as triggered by {#forward_event}.
 		# @parameter event [String] The type of the event.
 		def handle(event)
 		end
 		
 		# Enqueue a remote procedure call to the currently bound page.
-		# @parameter method [Symbol] The name of the remote functio to invoke.
+		# @parameter method [Symbol] The name of the remote function to invoke.
 		# @parameter arguments [Array]
 		def rpc(*arguments)
 			if @page
