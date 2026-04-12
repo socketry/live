@@ -4,5 +4,5 @@
 # Copyright, 2021-2026, by Samuel Williams.
 
 module Live
-	VERSION = "0.18.1"
+	VERSION = "0.18.2"
 end
