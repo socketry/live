@@ -21,7 +21,7 @@ class ClockTag < Live::View
 	end
 	
 	def render(builder)
-		builder.tag('div') do
+		builder.tag("div") do
 			builder.text(Time.now.to_s)
 		end
 	end
@@ -33,22 +33,23 @@ end
 Implement a controller to render the clock tag:
 
 ```ruby
-require 'async/websocket/adapters/rails'
+require "async/websocket/adapters/rails"
 
 class ClockController < ApplicationController
-  RESOLVER = Live::Resolver.allow(ClockTag)
+	RESOLVER = Live::Resolver.allow(ClockTag)
 
-  def index
-    @tag = ClockTag.new('flappy')
-  end
+	def index
+		@tag = ClockTag.new("flappy")
+	end
 
-  skip_before_action :verify_authenticity_token, only: :live
+	skip_before_action :verify_authenticity_token, only: :live
 
-  def live
-    self.response = Async::WebSocket::Adapters::Rails.open(request) do |connection|
-      Live::Page.new(RESOLVER).run(connection)
-    end
-  end
+	def live
+		self.response = Async::WebSocket::Adapters::Rails.open(request) do |connection|
+			Live::Page.new(RESOLVER).run(connection)
+		end
+	end
+end
 ```
 
 ## View
@@ -67,10 +68,10 @@ Add a route to the controller:
 
 ```ruby
 Rails.application.routes.draw do
-  # Clock page:
-  get "clock/index"
+	# Clock page:
+	get "clock/index"
 	
 	# Live WebSocket:
-  match "clock/live", via: [:get, :connect]
+	match "clock/live", via: [:get, :connect]
 end
 ```

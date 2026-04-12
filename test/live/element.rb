@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2024, by Samuel Williams.
+# Copyright, 2024-2026, by Samuel Williams.
 
 require "live/element"
 
@@ -80,8 +80,8 @@ describe Live::Element do
 	with "a mock page" do
 		let(:page) do
 			page = Object.new
-			page.define_singleton_method(:enqueued) {@enqueued ||= []}
-			page.define_singleton_method(:enqueue) {|args| enqueued << args}
+			page.define_singleton_method(:enqueued){@enqueued ||= []}
+			page.define_singleton_method(:enqueue){|args| enqueued << args}
 			page
 		end
 		

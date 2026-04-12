@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2021-2024, by Samuel Williams.
+# Copyright, 2021-2026, by Samuel Williams.
 
 source "https://rubygems.org"
 
@@ -29,3 +29,5 @@ group :test do
 	gem "sus-fixtures-async-http"
 	gem "sus-fixtures-async-webdriver"
 end
+
+gem "rubocop-md", "~> 2.0", group: :test
