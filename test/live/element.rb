@@ -169,11 +169,11 @@ describe Live::Element do
 		end
 		
 		with "#dispatch_event" do
-			it "enqueues a dispatch_event RPC with correct type" do
+			it "enqueues a dispatchEvent RPC with correct type" do
 				element.dispatch_event("#my-element", "click")
 				
 				args = page.enqueued.last
-				expect(args[0]).to be == :dispatch_event
+				expect(args[0]).to be == :dispatchEvent
 				expect(args[1]).to be == "#my-element"
 				expect(args[2]).to be == "click"
 			end
@@ -182,7 +182,7 @@ describe Live::Element do
 				element.dispatch_event("[data-id=\"test\"]", "gametick", detail: {score: 42}, bubbles: true)
 				
 				args = page.enqueued.last
-				expect(args[0]).to be == :dispatch_event
+				expect(args[0]).to be == :dispatchEvent
 				expect(args[1]).to be == "[data-id=\"test\"]"
 				expect(args[2]).to be == "gametick"
 				expect(args[3]).to be == {detail: {score: 42}, bubbles: true}
