@@ -124,7 +124,7 @@ describe "website" do
 		tag.append("ul.test", '<li class="appended">Appended</li>')
 		
 		# find_element(css: "ul.test li.appended")
-
+		
 		expect(find_element(css: "ul.test").text).to be =~ /Middle.*?Appended/m
 	end
 	

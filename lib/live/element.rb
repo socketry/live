@@ -145,7 +145,7 @@ module Live
 		end
 		
 		def dispatch_event(selector, type, **options)
-			rpc(:dispatch_event, selector, event, options)
+			rpc(:dispatch_event, selector, type, options)
 		end
 		
 		# Render the element.
