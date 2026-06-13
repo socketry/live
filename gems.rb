@@ -12,15 +12,17 @@ group :maintenance, optional: true do
 	gem "bake-modernize"
 	gem "bake-releases"
 	
+	gem "decode"
+	
 	gem "utopia-project"
 end
 
 group :test do
 	gem "sus"
 	gem "covered"
-	gem "decode"
 	
 	gem "rubocop"
+	gem "rubocop-md"
 	gem "rubocop-socketry"
 	
 	gem "bake-test"
@@ -29,5 +31,3 @@ group :test do
 	gem "sus-fixtures-async-http"
 	gem "sus-fixtures-async-webdriver"
 end
-
-gem "rubocop-md", "~> 2.0", group: :test
