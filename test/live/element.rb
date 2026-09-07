@@ -24,7 +24,7 @@ describe Live::Element do
 	end
 	
 	it "can be initialized with a default class" do
-		element = subject.new
+		element = subject.new("test", {})
 		
 		expect(element.id).to be_a(String)
 		expect(element.data[:class]).to be == "Live::Element"
@@ -34,7 +34,7 @@ describe Live::Element do
 		it "separates element data from constructor options" do
 			dependency = Object.new
 			element_class = Class.new(subject) do
-				def initialize(id = self.class.unique_id, data = {}, dependency:)
+				def initialize(id, data, dependency:)
 					super(id, data)
 					@dependency = dependency
 				end
@@ -52,7 +52,7 @@ describe Live::Element do
 	
 	with "#mount" do
 		it "can mount subview" do
-			parent = subject.new("parent")
+			parent = subject.root("parent")
 			child = subject.mount(parent, "child")
 			
 			expect(child.id).to be == "parent:child"
@@ -61,7 +61,7 @@ describe Live::Element do
 		it "separates element data from constructor options" do
 			dependency = Object.new
 			element_class = Class.new(subject) do
-				def initialize(id = self.class.unique_id, data = {}, dependency:)
+				def initialize(id, data, dependency:)
 					super(id, data)
 					@dependency = dependency
 				end
@@ -69,7 +69,7 @@ describe Live::Element do
 				attr :dependency
 			end
 			
-			parent = subject.new("parent")
+			parent = subject.root("parent")
 			child = element_class.mount(parent, "child", data: {name: "Test"}, dependency:)
 			
 			expect(child.id).to be == "parent:child"
@@ -79,7 +79,7 @@ describe Live::Element do
 	end
 	
 	with "#forward_event" do
-		let(:element) {subject.new("test-element")}
+		let(:element) {subject.root("test-element")}
 		
 		it "generates JavaScript without detail" do
 			result = element.forward_event
@@ -98,7 +98,7 @@ describe Live::Element do
 	end
 	
 	with "#forward_form_event" do
-		let(:element) {subject.new("test-element")}
+		let(:element) {subject.root("test-element")}
 		
 		it "generates JavaScript without detail" do
 			result = element.forward_form_event
@@ -125,7 +125,7 @@ describe Live::Element do
 		end
 		
 		let(:element) do
-			el = subject.new("rpc-test")
+			el = subject.root("rpc-test")
 			el.bind(page)
 			el
 		end
@@ -138,7 +138,7 @@ describe Live::Element do
 			end
 			
 			it "raises PageError when not bound" do
-				unbound = subject.new("unbound")
+				unbound = subject.root("unbound")
 				
 				expect do
 					unbound.rpc(:test)
@@ -230,7 +230,7 @@ describe Live::Element do
 	end
 	
 	with "#bind and #close" do
-		let(:element) {subject.new("lifecycle-test")}
+		let(:element) {subject.root("lifecycle-test")}
 		
 		it "tracks the bound page" do
 			expect(element.page).to be_nil

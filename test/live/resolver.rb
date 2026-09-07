@@ -41,7 +41,7 @@ describe Live::Resolver do
 					"ViewWithDependency"
 				end
 				
-				def initialize(id = self.class.unique_id, data = {}, dependency:)
+				def initialize(id, data, dependency:)
 					super(id, data)
 					@dependency = dependency
 				end

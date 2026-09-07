@@ -32,7 +32,7 @@ describe Live::Page do
 	end
 	
 	with "#attach" do
-		let(:view) {MyView.new}
+		let(:view) {MyView.root}
 		
 		it "can resolve attached elements" do
 			page.attach(view)
