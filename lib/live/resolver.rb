@@ -13,6 +13,7 @@ module Live
 			self.new.allow(*arguments).freeze
 		end
 		
+		# Initialize an empty resolver.
 		def initialize
 			@allowed = {}
 		end
@@ -20,6 +21,7 @@ module Live
 		# @attribute [Hash(String, Class)] A map of allowed class names.
 		attr :allowed
 		
+		# Freeze the resolver and its map of allowed classes.
 		def freeze
 			return self unless frozen?
 			
