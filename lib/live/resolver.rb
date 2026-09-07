@@ -37,18 +37,19 @@ module Live
 			return self
 		end
 		
-		# Construct an allowed view from its class.
+		# Construct an allowed root element from its class.
 		# @parameter view_class [Class] The view class to construct.
 		# @parameter id [String] The unique identifier for the view.
 		# @parameter data [Hash] The data associated with the view.
+		# @parameter arguments [Hash] Additional arguments passed to the view constructor.
 		# @returns [Element] A new view instance.
 		# @raises [ArgumentError] If the view class is not allowed.
-		def make(view_class, id: view_class.unique_id, data: {})
+		def root(view_class, id = view_class.unique_id, data: {}, **arguments)
 			unless @allowed[view_class.name].equal?(view_class)
 				raise ArgumentError, "View class is not allowed: #{view_class.to_s.dump}!"
 			end
 			
-			return construct(view_class, id, data)
+			return make(view_class, id, data, **arguments)
 		end
 		
 		# Resolve a tag.
@@ -57,14 +58,14 @@ module Live
 		# @returns [Element] The element instance if it was allowed.
 		def call(id, data)
 			if view_class = @allowed[data[:class]]
-				return construct(view_class, id, data)
+				return make(view_class, id, data)
 			end
 		end
 		
 		private
 		
-		def construct(view_class, id, data)
-			view_class.new(id, data)
+		def make(view_class, id, data, **arguments)
+			view_class.new(id, data, **arguments)
 		end
 	end
 end

@@ -31,8 +31,8 @@ This view tracks how many times it's been clicked.
 require 'live/view'
 
 class ClickCounter < Live::View
-	def initialize(id, **data)
-		super
+	def initialize(id = self.class.unique_id, data = {})
+		super(id, data)
 		
 		# Setup the initial state:
 		@data[:count] ||= 0

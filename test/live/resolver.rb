@@ -17,9 +17,9 @@ describe Live::Resolver do
 	
 	let(:resolver) {subject.allow(view_class)}
 	
-	with "#make" do
+	with "#root" do
 		it "constructs an allowed view" do
-			view = resolver.make(view_class, id: "root", data: {mode: "test"})
+			view = resolver.root(view_class, "root", data: {mode: "test"})
 			
 			expect(view).to be_a(view_class)
 			expect(view.id).to be == "root"
@@ -30,8 +30,29 @@ describe Live::Resolver do
 			other_view = Class.new(Live::View)
 			
 			expect do
-				resolver.make(other_view)
+				resolver.root(other_view)
 			end.to raise_exception(ArgumentError, message: be =~ /View class is not allowed: "#<Class:/)
+		end
+		
+		it "passes constructor arguments to the view" do
+			dependency = Object.new
+			view_class = Class.new(Live::View) do
+				def self.name
+					"ViewWithDependency"
+				end
+				
+				def initialize(id = self.class.unique_id, data = {}, dependency:)
+					super(id, data)
+					@dependency = dependency
+				end
+				
+				attr :dependency
+			end
+			resolver = subject.allow(view_class)
+			
+			view = resolver.root(view_class, dependency:)
+			
+			expect(view.dependency).to be_equal(dependency)
 		end
 	end
 	
@@ -48,24 +69,24 @@ describe Live::Resolver do
 		end
 	end
 	
-	with "#construct" do
+	with "#make" do
 		it "is shared by explicit and resolved construction" do
 			constructions = []
 			resolver_class = Class.new(subject) do
 				private
 				
-				define_method(:construct) do |view_class, id, data|
-					constructions << [view_class, id, data]
+				define_method(:make) do |view_class, id, data, **arguments|
+					constructions << [view_class, id, data, arguments]
 				end
 			end
 			resolver = resolver_class.allow(view_class)
 			
-			resolver.make(view_class, id: "made", data: {source: "make"})
+			resolver.root(view_class, "made", data: {source: "root"}, dependency: true)
 			resolver.call("called", {class: view_class.name, source: "call"})
 			
 			expect(constructions).to be == [
-				[view_class, "made", {source: "make"}],
-				[view_class, "called", {class: view_class.name, source: "call"}],
+				[view_class, "made", {source: "root"}, {dependency: true}],
+				[view_class, "called", {class: view_class.name, source: "call"}, {}],
 			]
 		end
 	end

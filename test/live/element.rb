@@ -30,12 +30,51 @@ describe Live::Element do
 		expect(element.data[:class]).to be == "Live::Element"
 	end
 	
+	with ".root" do
+		it "separates element data from constructor arguments" do
+			dependency = Object.new
+			element_class = Class.new(subject) do
+				def initialize(id = self.class.unique_id, data = {}, dependency:)
+					super(id, data)
+					@dependency = dependency
+				end
+				
+				attr :dependency
+			end
+			
+			element = element_class.root("root", data: {name: "Test"}, dependency:)
+			
+			expect(element.id).to be == "root"
+			expect(element.data[:name]).to be == "Test"
+			expect(element.dependency).to be_equal(dependency)
+		end
+	end
+	
 	with "#mount" do
 		it "can mount subview" do
 			parent = subject.new("parent")
 			child = subject.mount(parent, "child")
 			
 			expect(child.id).to be == "parent:child"
+		end
+		
+		it "separates element data from constructor arguments" do
+			dependency = Object.new
+			element_class = Class.new(subject) do
+				def initialize(id = self.class.unique_id, data = {}, dependency:)
+					super(id, data)
+					@dependency = dependency
+				end
+				
+				attr :dependency
+			end
+			
+			parent = subject.new("parent")
+			child = element_class.mount(parent, "child", data: {name: "Test"}, dependency:)
+			
+			expect(child.id).to be == "parent:child"
+			expect(child.data[:name]).to be == "Test"
+			expect(child.dependency).to be_equal(dependency)
 		end
 	end
 	
