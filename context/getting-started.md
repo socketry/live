@@ -31,8 +31,8 @@ This view tracks how many times it's been clicked.
 require 'live/view'
 
 class ClickCounter < Live::View
-	def initialize(id, **data)
-		super
+	def initialize(id, data)
+		super(id, data)
 		
 		# Setup the initial state:
 		@data[:count] ||= 0
@@ -58,7 +58,7 @@ end
 Render the tag in your view layer:
 
 ~~~ ruby
-#{ClickCounter.new.to_html}
+#{ClickCounter.root.to_html}
 ~~~
 
 ## Implementing the Server

@@ -20,26 +20,36 @@ module Live
 		#
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def self.root(id = self.unique_id, **data)
-			self.new(id, data)
+		# @parameter options [Hash] Additional options passed to the element constructor.
+		def self.root(id = self.unique_id, data: {}, **options)
+			self.new(id, data, **options)
 		end
 		
 		# Mount an element within a parent element.
-		def self.child(parent, id = self.unique_id, **data)
+		# @parameter parent [Element] The parent element.
+		# @parameter id [String] The unique identifier within the parent element.
+		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
+		# @parameter options [Hash] Additional options passed to the element constructor.
+		def self.child(parent, id = self.unique_id, data: {}, **options)
 			full_id = parent.id + ":" + id
 			
-			self.new(full_id, data)
+			self.new(full_id, data, **options)
 		end
 		
-		def self.mount(parent, id, data = {})
-			self.child(parent, id, **data)
+		# Mount an element within a parent element.
+		# @parameter parent [Element] The parent element.
+		# @parameter id [String] The unique identifier within the parent element.
+		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
+		# @parameter options [Hash] Additional options passed to the element constructor.
+		def self.mount(parent, id, data: {}, **options)
+			self.child(parent, id, data:, **options)
 		end
 		
 		# Initialize the element with the specified id and data.
 		#
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		def initialize(id = self.class.unique_id, data = {})
+		def initialize(id, data)
 			data[:class] ||= self.class.name
 			
 			@id = id

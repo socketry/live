@@ -39,7 +39,7 @@ class ClockController < ApplicationController
 	RESOLVER = Live::Resolver.allow(ClockTag)
 	
 	def index
-		@tag = ClockTag.new("flappy")
+		@tag = ClockTag.root("flappy")
 	end
 	
 	skip_before_action :verify_authenticity_token, only: :live

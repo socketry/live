@@ -6,7 +6,7 @@
 require "live/view"
 
 describe Live::View do
-	let(:view) {subject.new("test-id")}
+	let(:view) {subject.root("test-id")}
 	
 	with "#to_s" do
 		it "can generate string representation" do

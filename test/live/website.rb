@@ -8,6 +8,7 @@ require "sus/fixtures/async/webdriver/session_context"
 
 require "async/websocket"
 require "async/websocket/adapters/http"
+require "async/promise"
 
 require "protocol/http"
 require "protocol/http/body/file"
@@ -36,10 +37,24 @@ class TestTag < Live::View
 		"TestTag"
 	end
 	
+	def initialize(...)
+		super
+		
+		@closed = Async::Promise.new
+	end
+	
+	attr :closed
+	
 	def bind(...)
 		super
 		
 		self.update!
+	end
+	
+	def close
+		super
+		
+		@closed.resolve(true)
 	end
 	
 	def render(builder)
@@ -151,6 +166,7 @@ describe "website" do
 		
 		# Disconnect the session:
 		2.times{navigate_to("about:blank")}
+		tag.closed.wait(timeout: 1)
 		
 		expect do
 			tag.update!
