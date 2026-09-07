@@ -7,8 +7,10 @@ require_relative "element"
 require "xrb/builder"
 
 module Live
-	# Represents a single division of content on the page an provides helpers for rendering the content.
+	# Represents a single division of content on the page and provides helpers for rendering the content.
 	class View < Element
+		# Get the custom element tag name used to render the view.
+		# @returns [String] The custom element tag name.
 		def tag_name
 			"live-view"
 		end

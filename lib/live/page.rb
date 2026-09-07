@@ -41,6 +41,8 @@ module Live
 			@attached[element.id] = element
 		end
 		
+		# Detach and close a previously attached element.
+		# @parameter element [Live::Element] The element to detach.
 		def detach(element)
 			if @attached.delete(element.id)
 				element.close
@@ -71,6 +73,7 @@ module Live
 			return nil
 		end
 		
+		# Close all elements bound to the page.
 		def close
 			@elements.each do |id, element|
 				begin
@@ -81,6 +84,8 @@ module Live
 			end
 		end
 		
+		# Enqueue an update to be sent to the connected client.
+		# @parameter update [Array] The remote procedure call to serialize and send.
 		def enqueue(update)
 			@updates.enqueue(::Protocol::WebSocket::TextMessage.generate(update))
 		end

@@ -7,11 +7,14 @@ require "json"
 require "securerandom"
 
 module Live
+	# Raised when an operation requires an element to be bound to a page.
 	class PageError < RuntimeError
 	end
 	
 	# Represents a single dynamic content area on the page.
 	class Element
+		# Generate a unique identifier for an element.
+		# @returns [String] The generated identifier.
 		def self.unique_id
 			SecureRandom.uuid
 		end
@@ -63,7 +66,7 @@ module Live
 		# The data associated with the element.
 		attr :data
 		
-		# @attribute [Page | Nil] The page this elemenet is bound to.
+		# @attribute [Page | Nil] The page this element is bound to.
 		attr :page
 		
 		# Generate a JavaScript string which forwards the specified event to the server.
@@ -76,6 +79,9 @@ module Live
 			end
 		end
 		
+		# Generate JavaScript which forwards a form event and its form data to the server.
+		# @parameter detail [Hash | Nil] Additional detail associated with the forwarded event.
+		# @returns [String] The generated JavaScript expression.
 		def forward_form_event(detail = nil)
 			if detail
 				"live.forwardFormEvent(#{JSON.dump(@id)}, event, #{JSON.dump(detail)})"
@@ -90,6 +96,7 @@ module Live
 			@page = page
 		end
 		
+		# Detach the element from its page.
 		def close
 			@page = nil
 		end
@@ -112,6 +119,9 @@ module Live
 			end
 		end
 		
+		# Execute JavaScript in the context of the client-side element.
+		# @parameter code [String] The JavaScript source code to execute.
+		# @parameter options [Hash] Options for the remote procedure call.
 		def script(code, **options)
 			rpc(:script, @id, code, options)
 		end
@@ -154,6 +164,10 @@ module Live
 			rpc(:remove, selector, options)
 		end
 		
+		# Dispatch an event to each client-side element matching the selector.
+		# @parameter selector [String] The CSS selector for the target elements.
+		# @parameter type [String] The event type to dispatch.
+		# @parameter options [Hash] The event initialization options.
 		def dispatch_event(selector, type, **options)
 			rpc(:dispatchEvent, selector, type, options)
 		end
@@ -164,10 +178,14 @@ module Live
 			builder.text(self.class.name)
 		end
 		
+		# Append this element's markup to the specified output buffer.
+		# @parameter output [Object] The output buffer which receives the markup.
 		def append_markup(output)
 			build_markup(::XRB::Builder.new(output))
 		end
 		
+		# Build this element's markup with the specified builder.
+		# @parameter builder [XRB::Builder] The builder which receives the markup.
 		def build_markup(builder)
 			render(builder)
 		end
