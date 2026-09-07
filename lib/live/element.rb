@@ -20,29 +20,29 @@ module Live
 		#
 		# @parameter id [String] The unique identifier within the page.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		# @parameter arguments [Hash] Additional arguments passed to the element constructor.
-		def self.root(id = self.unique_id, data: {}, **arguments)
-			self.new(id, data, **arguments)
+		# @parameter options [Hash] Additional options passed to the element constructor.
+		def self.root(id = self.unique_id, data: {}, **options)
+			self.new(id, data, **options)
 		end
 		
 		# Mount an element within a parent element.
 		# @parameter parent [Element] The parent element.
 		# @parameter id [String] The unique identifier within the parent element.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		# @parameter arguments [Hash] Additional arguments passed to the element constructor.
-		def self.child(parent, id = self.unique_id, data: {}, **arguments)
+		# @parameter options [Hash] Additional options passed to the element constructor.
+		def self.child(parent, id = self.unique_id, data: {}, **options)
 			full_id = parent.id + ":" + id
 			
-			self.new(full_id, data, **arguments)
+			self.new(full_id, data, **options)
 		end
 		
 		# Mount an element within a parent element.
 		# @parameter parent [Element] The parent element.
 		# @parameter id [String] The unique identifier within the parent element.
 		# @parameter data [Hash] The data associated with the element, typically stored as `data-` attributes.
-		# @parameter arguments [Hash] Additional arguments passed to the element constructor.
-		def self.mount(parent, id, data: {}, **arguments)
-			self.child(parent, id, data:, **arguments)
+		# @parameter options [Hash] Additional options passed to the element constructor.
+		def self.mount(parent, id, data: {}, **options)
+			self.child(parent, id, data:, **options)
 		end
 		
 		# Initialize the element with the specified id and data.

@@ -41,15 +41,15 @@ module Live
 		# @parameter view_class [Class] The view class to construct.
 		# @parameter id [String] The unique identifier for the view.
 		# @parameter data [Hash] The data associated with the view.
-		# @parameter arguments [Hash] Additional arguments passed to the view constructor.
+		# @parameter options [Hash] Additional options passed to the view constructor.
 		# @returns [Element] A new view instance.
 		# @raises [ArgumentError] If the view class is not allowed.
-		def root(view_class, id = view_class.unique_id, data: {}, **arguments)
+		def root(view_class, id = view_class.unique_id, data: {}, **options)
 			unless @allowed[view_class.name].equal?(view_class)
 				raise ArgumentError, "View class is not allowed: #{view_class.to_s.dump}!"
 			end
 			
-			return make(view_class, id, data, **arguments)
+			return make(view_class, id, data, **options)
 		end
 		
 		# Resolve a tag.
@@ -64,8 +64,8 @@ module Live
 		
 		private
 		
-		def make(view_class, id, data, **arguments)
-			view_class.new(id, data, **arguments)
+		def make(view_class, id, data, **options)
+			view_class.new(id, data, **options)
 		end
 	end
 end

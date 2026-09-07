@@ -31,7 +31,7 @@ describe Live::Element do
 	end
 	
 	with ".root" do
-		it "separates element data from constructor arguments" do
+		it "separates element data from constructor options" do
 			dependency = Object.new
 			element_class = Class.new(subject) do
 				def initialize(id = self.class.unique_id, data = {}, dependency:)
@@ -58,7 +58,7 @@ describe Live::Element do
 			expect(child.id).to be == "parent:child"
 		end
 		
-		it "separates element data from constructor arguments" do
+		it "separates element data from constructor options" do
 			dependency = Object.new
 			element_class = Class.new(subject) do
 				def initialize(id = self.class.unique_id, data = {}, dependency:)

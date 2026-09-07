@@ -34,7 +34,7 @@ describe Live::Resolver do
 			end.to raise_exception(ArgumentError, message: be =~ /View class is not allowed: "#<Class:/)
 		end
 		
-		it "passes constructor arguments to the view" do
+		it "passes constructor options to the view" do
 			dependency = Object.new
 			view_class = Class.new(Live::View) do
 				def self.name
@@ -75,8 +75,8 @@ describe Live::Resolver do
 			resolver_class = Class.new(subject) do
 				private
 				
-				define_method(:make) do |view_class, id, data, **arguments|
-					constructions << [view_class, id, data, arguments]
+				define_method(:make) do |view_class, id, data, **options|
+					constructions << [view_class, id, data, options]
 				end
 			end
 			resolver = resolver_class.allow(view_class)
