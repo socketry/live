@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v0.19.0
 
 ### Explicit Element Construction
 
