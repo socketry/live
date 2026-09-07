@@ -61,13 +61,58 @@ Render the tag in your view layer:
 #{ClickCounter.root.to_html}
 ~~~
 
+## Handling Forms
+
+Forms can forward submissions to their server-side view without navigating away from the page. The {ruby Live::Element#forward_form_event} helper prevents the normal submission, serializes the successful form controls, and sends them as part of the event.
+
+~~~ ruby
+class ContactForm < Live::View
+	def handle(event)
+		return unless event[:type] == "submit"
+		
+		fields = event[:formData].to_h
+		@data[:status] = "Received: #{fields.fetch("message")}"
+		
+		update!
+	end
+	
+	def render(builder)
+		builder.tag :form, action: "/contact", method: "post", onsubmit: forward_form_event do
+			builder.tag :textarea, name: "message" do
+				builder.text("")
+			end
+			
+			builder.tag :button, type: "submit", name: "action", value: "send" do
+				builder.text("Send")
+			end
+			
+			if status = @data[:status]
+				builder.tag :p do
+					builder.text(status)
+				end
+			end
+		end
+	end
+end
+~~~
+
+The `event[:formData]` value is an array of name-value pairs, preserving repeated controls with the same name. Convert it to a hash only when the form uses unique control names. The submitting button's name and value are included when available.
+
+The form's normal `action` and `method` still provide a fallback when JavaScript is unavailable. The application is responsible for handling that HTTP endpoint.
+
+Render the form in the same way as any other live view:
+
+~~~ ruby
+#{ContactForm.root.to_html}
+~~~
+
 ## Implementing the Server
 
 On the server side, in the controller layer, we need to handle the incoming WebSocket request:
 
 ~~~ ruby
 # This controls which classes can be created by the client tags:
-RESOLVER = Live::Resolver.allow(ClickCounter)
+RESOLVER = Live::Resolver.allow(ClickCounter, ContactForm)
 
 # At the same path as the request:
 run do |env|
