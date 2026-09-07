@@ -70,7 +70,7 @@ class ContactForm < Live::View
 	def handle(event)
 		return unless event[:type] == "submit"
 		
-		fields = event[:formData].to_h
+		fields = event[:form_data].to_h
 		@data[:status] = "Received: #{fields.fetch("message")}"
 		
 		update!
@@ -96,7 +96,7 @@ class ContactForm < Live::View
 end
 ~~~
 
-The `event[:formData]` value is an array of name-value pairs, preserving repeated controls with the same name. Convert it to a hash only when the form uses unique control names. The submitting button's name and value are included when available.
+The `event[:form_data]` value is an array of name-value pairs, preserving repeated controls with the same name. Convert it to a hash only when the form uses unique control names. The submitting button's name and value are included when available.
 
 The form's normal `action` and `method` still provide a fallback when JavaScript is unavailable. The application is responsible for handling that HTTP endpoint.
 
