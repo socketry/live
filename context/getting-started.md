@@ -42,12 +42,12 @@ class ClickCounter < Live::View
 	def handle(event)
 		@data[:count] = Integer(@data[:count]) + 1
 		
-		replace!
+		update!
 	end
 	
 	def render(builder)
 		# Forward the `onclick` event to the server:
-		builder.tag :button, onclick: forward do
+		builder.tag :button, onclick: forward_event do
 			builder.text("I've been clicked #{@data[:count]} times!")
 		end
 	end
