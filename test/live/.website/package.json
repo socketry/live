@@ -4,7 +4,7 @@
 	"dependencies": {
 		"@socketry/live": "^0.16"
 	},
-	"bake-node": {
+	"web-packages": {
 		"output": "_components",
 		"packages": {
 			"@socketry/live": {

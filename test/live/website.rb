@@ -12,7 +12,7 @@ require "async/websocket"
 require "async/websocket/adapters/http"
 require "async/promise"
 
-require "bake/node/manifest"
+require "web/packages/manifest"
 
 require "protocol/http"
 require "protocol/http/body/file"
@@ -75,7 +75,7 @@ describe "website" do
 	let(:root) {File.expand_path(".website", __dir__)}
 	let(:index) do
 		path = File.join(root, "index.html")
-		manifest = Bake::Node::Manifest.load(File.join(root, "_components"))
+		manifest = Web::Packages::Manifest.load(File.join(root, "_components"))
 		
 		File.read(path).sub("$IMPORT_MAP", JSON.generate(manifest.import_map))
 	end

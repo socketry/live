@@ -18,7 +18,7 @@ group :maintenance, optional: true do
 end
 
 group :test do
-	gem "bake-node"
+	gem "web-packages", "~> 0.2"
 	
 	gem "sus"
 	gem "covered"

@@ -25,7 +25,7 @@ jobs:
         cache-dependency-path: test/live/.website/package-lock.json
 
     - name: Install dependencies
-      run: bundle exec bake node:install root=test/live/.website frozen=true
+      run: bundle exec bake web:packages:install root=test/live/.website frozen=true
 
     - name: Check static packages
-      run: bundle exec bake node:packages:check root=test/live/.website
+      run: bundle exec bake web:packages:check root=test/live/.website
