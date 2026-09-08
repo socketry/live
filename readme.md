@@ -22,6 +22,10 @@ Please see the [project documentation](https://socketry.github.io/live/) for mor
 
 Please see the [project releases](https://socketry.github.io/live/releases/index) for all releases.
 
+### v0.21.0
+
+  - Add `Live::Element#selector` for safely targeting an element by its exact HTML identifier from CSS selector APIs.
+
 ### v0.20.0
 
   - [Web Packages](https://socketry.github.io/live/releases/index#web-packages)

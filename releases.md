@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v0.21.0
 
   - Add `Live::Element#selector` for safely targeting an element by its exact HTML identifier from CSS selector APIs.
 
