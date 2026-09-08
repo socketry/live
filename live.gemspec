@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
 	spec.version = Live::VERSION
 	
 	spec.summary = "Live HTML tags updated via a WebSocket."
-	spec.authors = ["Samuel Williams", "Olle Jonsson", "Tatsuhiro Ujihisa"]
+	spec.authors = ["Samuel Williams", "Matt Quinn", "Olle Jonsson", "Tatsuhiro Ujihisa"]
 	spec.license = "MIT"
 	
 	spec.cert_chain  = ["release.cert"]
@@ -16,6 +16,8 @@ Gem::Specification.new do |spec|
 	spec.homepage = "https://github.com/socketry/live"
 	
 	spec.metadata = {
+		"bug_tracker_uri" => "https://github.com/socketry/live/issues",
+		"changelog_uri" => "https://github.com/socketry/live/blob/main/releases.md",
 		"documentation_uri" => "https://socketry.github.io/live/",
 		"source_code_uri" => "https://github.com/socketry/live.git",
 	}

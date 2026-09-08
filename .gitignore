@@ -1,8 +1,7 @@
 /agents.md
-/.context
+/.agents/
 /.bundle
 /pkg
 /gems.locked
 /.covered.db
 /external
-/test/live/.website/node_modules

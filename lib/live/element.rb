@@ -2,6 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2021-2026, by Samuel Williams.
+# Copyright, 2026, by Matt Quinn.
 
 require "json"
 require "securerandom"
