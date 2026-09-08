@@ -1,5 +1,28 @@
 {
+	"name": "live-test-website",
+	"private": true,
 	"dependencies": {
 		"@socketry/live": "^0.16"
+	},
+	"web-packages": {
+		"output": "_components",
+		"packages": {
+			"@socketry/live": {
+				"include": [
+					"Live.js"
+				],
+				"imports": {
+					"live": "Live.js"
+				}
+			},
+			"morphdom": {
+				"include": [
+					"morphdom-esm.js"
+				],
+				"imports": {
+					"morphdom": "morphdom-esm.js"
+				}
+			}
+		}
 	}
 }
