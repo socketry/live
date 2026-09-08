@@ -70,6 +70,12 @@ module Live
 		# @attribute [Page | Nil] The page this element is bound to.
 		attr :page
 		
+		# A CSS selector that uniquely identifies this element.
+		# @returns [String]
+		def selector
+			"[id=#{JSON.dump(@id)}]"
+		end
+		
 		# Generate a JavaScript string which forwards the specified event to the server.
 		# @parameter detail [Hash] The detail associated with the forwarded event.
 		def forward_event(detail = nil)

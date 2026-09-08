@@ -30,6 +30,14 @@ describe Live::Element do
 		expect(element.data[:class]).to be == "Live::Element"
 	end
 	
+	with "#selector" do
+		it "selects the exact element id" do
+			element = subject.new('2eef0b2c:child"view', {})
+			
+			expect(element.selector).to be == '[id="2eef0b2c:child\\"view"]'
+		end
+	end
+	
 	with ".root" do
 		it "separates element data from constructor options" do
 			dependency = Object.new
