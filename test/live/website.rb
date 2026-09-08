@@ -6,9 +6,13 @@
 require "sus/fixtures/async/http/server_context"
 require "sus/fixtures/async/webdriver/session_context"
 
+require "json"
+
 require "async/websocket"
 require "async/websocket/adapters/http"
 require "async/promise"
+
+require "bake/node/manifest"
 
 require "protocol/http"
 require "protocol/http/body/file"
@@ -69,6 +73,12 @@ describe "website" do
 	include Sus::Fixtures::Async::WebDriver::SessionContext
 	
 	let(:root) {File.expand_path(".website", __dir__)}
+	let(:index) do
+		path = File.join(root, "index.html")
+		manifest = Bake::Node::Manifest.load(File.join(root, "_components"))
+		
+		File.read(path).sub("$IMPORT_MAP", JSON.generate(manifest.import_map))
+	end
 	
 	def content_type(path)
 		case File.extname(path)
@@ -89,7 +99,9 @@ describe "website" do
 		::Protocol::HTTP::Middleware.for do |request|
 			local_path = File.join(root, request.path)
 			
-			if File.file?(local_path)
+			if request.path == "/index.html"
+				Protocol::HTTP::Response[200, {"content-type" => "text/html"}, [index]]
+			elsif File.file?(local_path)
 				Protocol::HTTP::Response[200, {"content-type" => content_type(local_path)}, ::Protocol::HTTP::Body::File.open(local_path)]
 			elsif request.path == "/live"
 				Async::WebSocket::Adapters::HTTP.open(request) do |connection|

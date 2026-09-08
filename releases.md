@@ -1,5 +1,11 @@
 # Releases
 
+## Unreleased
+
+### JavaScript Test Packages
+
+Live now uses Bake Node to install and project the JavaScript packages used by its browser integration tests. The generated static package manifest supplies the test page import map, while `node_modules` is treated as a disposable package-manager projection.
+
 ## v0.19.0
 
 ### Explicit Element Construction

@@ -1,0 +1,25 @@
+{
+  "format": 1,
+  "base": "/_components/",
+  "imports": {
+    "live": "/_components/@socketry/live/Live.js",
+    "morphdom": "/_components/morphdom/morphdom-esm.js"
+  },
+  "packages": {
+    "@socketry/live": {
+      "version": "0.16.0",
+      "source": ".",
+      "files": {
+        "Live.js": "74d31c1af27eddaaf1c2cbd7d0c2b7e51e9f123800c130ce468ee0a998160f3d"
+      }
+    },
+    "morphdom": {
+      "version": "2.7.7",
+      "source": "dist",
+      "files": {
+        "morphdom-esm.js": "48e804579b52b7e0f6a6331e6436d5d1c2e21c24f815528d8a91bc350984ec3a"
+      }
+    }
+  },
+  "digest": "26730554c6c7938b737947014a44d59ee78feb7c2939acf53726caeb58685b4a"
+}

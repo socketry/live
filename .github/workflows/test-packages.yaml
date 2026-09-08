@@ -1,0 +1,31 @@
+name: Test Packages
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test Packages
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ruby
+        bundler-cache: true
+
+    - uses: actions/setup-node@v7
+      with:
+        node-version: 24
+        cache: npm
+        cache-dependency-path: test/live/.website/package-lock.json
+
+    - name: Install dependencies
+      run: bundle exec bake node:install root=test/live/.website frozen=true
+
+    - name: Check static packages
+      run: bundle exec bake node:packages:check root=test/live/.website

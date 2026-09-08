@@ -5,3 +5,4 @@
 /gems.locked
 /.covered.db
 /external
+/test/live/.website/node_modules
