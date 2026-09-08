@@ -22,6 +22,14 @@ Please see the [project documentation](https://socketry.github.io/live/) for mor
 
 Please see the [project releases](https://socketry.github.io/live/releases/index) for all releases.
 
+### v0.20.0
+
+  - [Web Packages](https://socketry.github.io/live/releases/index#web-packages)
+
+### v0.19.0
+
+  - [Explicit Element Construction](https://socketry.github.io/live/releases/index#explicit-element-construction)
+
 ### v0.18.0
 
   - **Breaking Change**: Live now uses Web Components for managing life-cycle events instead of observers. You will need to use `live-js` v0.16.0 or later with this version of `live`, which emits `<live-view>` elements (instead of `<div>` elements).
